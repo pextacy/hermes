@@ -7,7 +7,7 @@ no wrapped IOU). The same primitives power **pull-based Merkle reward claims** f
 
 Built for **BCH BLAZE 2026**.
 
-> **Live demo:** _link added at submission_ · **Presentation:** _link added at submission_
+> **Live demo:** https://hermes-bch.netlify.app · **Presentation:** _link added at submission_
 
 ## Try it in two minutes — no wallet, no funds
 

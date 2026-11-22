@@ -1,6 +1,6 @@
 {
   "_comment": "Owner-confirmed submission facts read by `pnpm check:submission`. Filled in by the owner only.",
-  "liveDemoUrl": null,
+  "liveDemoUrl": "https://hermes-bch.netlify.app",
   "mainnetDemoTxids": [],
   "telegramConfirmed": false,
   "rollCall": null,
