@@ -13,7 +13,7 @@ export function WalletButton() {
           </button>
         </>
       ) : (
-        <button className="primary small" title="Connect a Bitcoin Cash wallet with WizardConnect" onClick={() => wc.connect()} disabled={wc.state === 'connecting' || wc.state === 'reconnecting'}>
+        <button className="small" title="Connect a Bitcoin Cash wallet with WizardConnect" onClick={() => wc.connect()} disabled={wc.state === 'connecting' || wc.state === 'reconnecting'}>
           {wc.state === 'connecting' ? (
             'Waiting for wallet…'
           ) : wc.state === 'reconnecting' ? (

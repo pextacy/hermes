@@ -1,5 +1,11 @@
 {
-  "id": { "domain": "hermes-id", "version": 1, "challengeFreshnessSeconds": 120, "minRelays": 3, "recentChangeWarningSeconds": 86400 },
+  "id": {
+    "domain": "hermes-id",
+    "version": 1,
+    "challengeFreshnessSeconds": 120,
+    "minRelays": 3,
+    "recentChangeWarningSeconds": 86400
+  },
   "swap": {
     "tFirstSeconds": 10800,
     "tSecondSeconds": 3600,
@@ -9,12 +15,17 @@
     "solverCapUsdPerHour": 500,
     "testnetUnlimited": true
   },
-  "drops": { "rootTimelockBlocks": 144, "shards": 8, "demoLeaves": 400, "maxDepth": 16 },
+  "drops": {
+    "rootTimelockBlocks": 144,
+    "shards": 8,
+    "demoLeaves": 400,
+    "maxDepth": 16
+  },
   "web": {
     "banner": {
       "presentationUrl": "https://docs.google.com/presentation/d/1Yfuk9CJkf4U9M_WukcELhumWgj3Ak6345Ewy8hSp-Hk/edit?usp=sharing",
       "presentationIsDraft": true,
-      "repoUrl": null,
+      "repoUrl": "https://github.com/pextacy/hermes",
       "ember2026Address": null,
       "preExisting": null
     },
