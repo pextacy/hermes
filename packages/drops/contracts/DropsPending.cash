@@ -1,0 +1,19 @@
+pragma cashscript ^0.14.0;
+
+// Hermes Drops — pending root. The root authority mints one NFT per shard (commitment
+// shardIndex (1) | epoch (4 LE) | root (32)) to this address. It can only be promoted into
+// the shard after ROOT_TIMELOCK blocks (relative timelock on this very UTXO, so nobody can
+// shorten it), giving watchers a window to audit the root. The authority may cancel it
+// before promotion (veto a wrong root).
+contract DropsPending(int rootTimelock, bytes32 receiptCategory, bytes20 authorityPkh) {
+    function promote() {
+        require(this.activeInputIndex == 1);
+        require(this.age >= rootTimelock);
+        require(tx.inputs[0].tokenCategory == receiptCategory + 0x02);
+    }
+
+    function cancel(pubkey authorityPk, sig authoritySig) {
+        require(hash160(authorityPk) == authorityPkh);
+        require(checkSig(authoritySig, authorityPk));
+    }
+}

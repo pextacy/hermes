@@ -1,0 +1,147 @@
+{
+  "bch": {
+    "mainnet": {
+      "name": "mainnet",
+      "cashaddrPrefix": "bitcoincash",
+      "electrum": [
+        "bch.imaginary.cash",
+        "electroncash.de",
+        "bch.loping.net",
+        "fulcrum.greyh.at"
+      ],
+      "explorerTx": "https://explorer.bch.ninja/tx/",
+      "tokens": {
+        "PUSD": {
+          "category": "2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544",
+          "symbol": "PUSD",
+          "decimalsFallback": 2,
+          "source": "https://paryonusd.com (verify against BCMR before use)",
+          "stable": true
+        },
+        "FLDCH": {
+          "category": "0adb865ee9cc3038de87fba682e6cd361414edc9acff0da2fd0690d75341c640",
+          "symbol": "FLDCH",
+          "decimalsFallback": 0,
+          "source": "https://tokenexplorer.cash/?tokenId=0adb865ee9cc3038de87fba682e6cd361414edc9acff0da2fd0690d75341c640",
+          "stable": false
+        },
+        "MUSD": {
+          "category": null,
+          "symbol": "MUSD",
+          "decimalsFallback": 2,
+          "stable": true,
+          "source": "MoriaUSD https://moria.money — set the category after verifying it there"
+        }
+      }
+    },
+    "chipnet": {
+      "name": "chipnet",
+      "cashaddrPrefix": "bchtest",
+      "electrum": [
+        "chipnet.bch.ninja",
+        "chipnet.imaginary.cash"
+      ],
+      "explorerTx": "https://chipnet.bch.ninja/tx/",
+      "faucets": [
+        "https://tbch.googol.cash/",
+        "https://chipnet.bch.ninja/"
+      ],
+      "tokens": {
+        "PUSD": {
+          "category": null,
+          "symbol": "tPUSD",
+          "decimalsFallback": 2,
+          "source": "Hermes test category, minted by `pnpm --filter solver mint-test-tokens -- --network chipnet`; set the category here after minting",
+          "stable": true
+        },
+        "FLDCH": {
+          "category": null,
+          "symbol": "tFLDCH",
+          "decimalsFallback": 0,
+          "source": "Hermes Drops chipnet demo category, created by `pnpm --filter @hermes/drops deploy:chipnet`",
+          "stable": false
+        },
+        "MUSD": {
+          "category": null,
+          "symbol": "tMUSD",
+          "decimalsFallback": 2,
+          "stable": true,
+          "source": "optional second test stablecoin, mint with `pnpm --filter solver mint-test-tokens -- --symbol MUSD`"
+        }
+      }
+    },
+    "testnet4": {
+      "name": "testnet4",
+      "cashaddrPrefix": "bchtest",
+      "electrum": [
+        "testnet4.imaginary.cash"
+      ],
+      "explorerTx": "https://tbch4.loping.net/tx/",
+      "faucets": [
+        "https://tbch.googol.cash/"
+      ],
+      "tokens": {
+        "PUSD": {
+          "category": "920439208e556b9778134f9ce2025e650abd7db2c5f3a6550b4116b3b0388ba0",
+          "symbol": "tPUSD",
+          "decimalsFallback": 2,
+          "source": "Hermes test category, minted by `pnpm --filter solver mint-test-tokens -- --network testnet4`; set the category here after minting",
+          "stable": true
+        },
+        "FLDCH": {
+          "category": "4b484bb233414fcdbbaacd89cc078e1e5e81ddaca81952824c3ae29714412d9f",
+          "symbol": "tFLDCH",
+          "decimalsFallback": 0,
+          "source": "Hermes Drops testnet4 demo category, created by `pnpm --filter @hermes/drops deploy:testnet4`",
+          "stable": false
+        },
+        "MUSD": {
+          "category": null,
+          "symbol": "tMUSD",
+          "decimalsFallback": 2,
+          "stable": true,
+          "source": "optional second test stablecoin, mint with `pnpm --filter solver mint-test-tokens -- --symbol MUSD`"
+        }
+      }
+    }
+  },
+  "evm": {
+    "baseSepolia": {
+      "chainId": 84532,
+      "name": "Base Sepolia",
+      "rpc": "https://sepolia.base.org",
+      "explorerTx": "https://sepolia.basescan.org/tx/",
+      "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "usdcSource": "Circle USDC testnet addresses (developers.circle.com) — verify",
+      "htlc": "0x99c4e891b3947d990bc6e4373536dc89a82c812f",
+      "confirmations": 3
+    },
+    "base": {
+      "chainId": 8453,
+      "name": "Base",
+      "rpc": "https://mainnet.base.org",
+      "explorerTx": "https://basescan.org/tx/",
+      "usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "usdcSource": "Circle USDC addresses — verify",
+      "htlc": null,
+      "confirmations": 10
+    },
+    "anvil": {
+      "chainId": 31337,
+      "name": "Anvil (local)",
+      "rpc": "http://127.0.0.1:8545",
+      "explorerTx": "",
+      "usdc": null,
+      "htlc": null,
+      "confirmations": 1
+    }
+  },
+  "nostr": {
+    "relays": [
+      "wss://relay.damus.io",
+      "wss://nos.lol",
+      "wss://relay.primal.net",
+      "wss://relay.nostr.band"
+    ]
+  }
+}

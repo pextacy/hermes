@@ -1,0 +1,24 @@
+{
+  "id": { "domain": "hermes-id", "version": 1, "challengeFreshnessSeconds": 120, "minRelays": 3, "recentChangeWarningSeconds": 86400 },
+  "swap": {
+    "tFirstSeconds": 10800,
+    "tSecondSeconds": 3600,
+    "safetyMarginSeconds": 3600,
+    "quoteExpirySeconds": 60,
+    "solverCapUsdPerSwap": 100,
+    "solverCapUsdPerHour": 500,
+    "testnetUnlimited": true
+  },
+  "drops": { "rootTimelockBlocks": 144, "shards": 8, "demoLeaves": 400, "maxDepth": 16 },
+  "web": {
+    "banner": {
+      "presentationUrl": "https://docs.google.com/presentation/d/1Yfuk9CJkf4U9M_WukcELhumWgj3Ak6345Ewy8hSp-Hk/edit?usp=sharing",
+      "presentationIsDraft": true,
+      "repoUrl": null,
+      "ember2026Address": null,
+      "preExisting": null
+    },
+    "payNetwork": "mainnet",
+    "demoNetwork": "chipnet"
+  }
+}

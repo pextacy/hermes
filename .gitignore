@@ -1,0 +1,35 @@
+node_modules/
+dist/
+.vite/
+packages/evm-htlc/out/
+packages/evm-htlc/cache/
+packages/evm-htlc/broadcast/
+*.sqlite
+*.db
+.env
+.env.*
+.DS_Store
+apps/solver/data/
+apps/watcher/data/
+coverage/
+
+# logs, build info, local tooling
+*.log
+*.tsbuildinfo
+.netlify/
+.vercel/
+.idea/
+.vscode/
+*.swp
+
+# never commit keys or wallets (keys live outside the repo, typed at runtime)
+keys.json
+*.wif
+*.pem
+*.key
+.hermes-testnet/
+*.mnemonic
+
+# local design files
+*.blend
+*.blend1

@@ -1,0 +1,1219 @@
+export default {
+  contractName: 'HermesSwapLedger',
+  constructorInputs: [
+    {
+      name: 'operator',
+      type: 'pubkey',
+    },
+  ],
+  abi: [
+    {
+      name: 'record',
+      selector: '8990b603',
+      inputs: [
+        {
+          name: 'hashlock',
+          type: 'bytes32',
+        },
+        {
+          name: 'secret',
+          type: 'bytes',
+        },
+        {
+          name: 'amount',
+          type: 'int256',
+        },
+        {
+          name: 'direction',
+          type: 'int256',
+        },
+        {
+          name: 's',
+          type: 'sig',
+        },
+        {
+          name: '__internal__vmapBatchSlot_0',
+          type: 'bytes32',
+        },
+        {
+          name: '__internal__vmapBatchProof_0',
+          type: 'bigint',
+        },
+        {
+          name: '__internal__vmapBatchNext_0',
+          type: 'bytes32',
+        },
+        {
+          name: '__internal__vmapBatchPredOut_0',
+          type: 'bigint',
+        },
+        {
+          name: '__internal__vmapBatchTrailingCount',
+          type: 'bigint',
+        },
+        {
+          name: '__internal__genesisCall',
+          type: 'bytes',
+        },
+        {
+          name: '__internal__returnOutputIdx',
+          type: 'bigint',
+        },
+      ],
+      writesState: true,
+      requiredNftIndices: [
+        0,
+      ],
+      entryAccesses: [
+        {
+          slotIndex: 0,
+          collection: 'settledAmount',
+          keyParams: [
+            'hashlock',
+          ],
+          operations: [
+            'read',
+            'write',
+          ],
+          mutationEffectOrdinals: [
+            2,
+          ],
+          valueSource: 'id:amount',
+        },
+      ],
+      sourceEffectOrder: 'unsupported-flow',
+      emits: [
+        {
+          eventName: 'Settled',
+          eventSignature: 'Settled(bytes32,int256,int256)',
+          emitIndex: 0,
+        },
+      ],
+      signatureGuard: {
+        key: {
+          kind: 'constructorArg',
+          name: 'operator',
+        },
+      },
+      sortedBatchInfo: [
+        {
+          collection: 'settledAmount',
+          slotIndices: [
+            0,
+          ],
+        },
+      ],
+      blockLayout: {
+        blockSize: 5,
+        slots: [
+          {
+            kind: 'master',
+            offset: 0,
+          },
+          {
+            kind: 'dataNft',
+            offset: 1,
+            nftIndex: 0,
+          },
+          {
+            kind: 'entry',
+            offset: 2,
+            slotIndex: 0,
+          },
+          {
+            kind: 'event',
+            offset: 3,
+            slotIndex: 0,
+          },
+          {
+            kind: 'returnEvent',
+            offset: 4,
+          },
+        ],
+      },
+    },
+    {
+      name: 'settledCount',
+      selector: '90327524',
+      inputs: [
+        {
+          name: '__internal__genesisCall',
+          type: 'bytes',
+        },
+        {
+          name: '__internal__returnOutputIdx',
+          type: 'bigint',
+        },
+      ],
+      outputs: [
+        {
+          type: 'int256',
+        },
+      ],
+      resultEncoding: 'evm-abi-v1',
+      callRecord: true,
+      modifiers: [
+        'view',
+      ],
+      writesState: false,
+      requiredNftIndices: [
+        0,
+      ],
+      sourceEffectOrder: 'linear',
+      directStateReturn: {
+        variables: [
+          'settledCount',
+        ],
+      },
+      blockLayout: {
+        blockSize: 3,
+        slots: [
+          {
+            kind: 'master',
+            offset: 0,
+          },
+          {
+            kind: 'dataNft',
+            offset: 1,
+            nftIndex: 0,
+          },
+          {
+            kind: 'returnEvent',
+            offset: 2,
+          },
+        ],
+      },
+    },
+    {
+      name: 'settledVolume',
+      selector: '78e70614',
+      inputs: [
+        {
+          name: '__internal__genesisCall',
+          type: 'bytes',
+        },
+        {
+          name: '__internal__returnOutputIdx',
+          type: 'bigint',
+        },
+      ],
+      outputs: [
+        {
+          type: 'int256',
+        },
+      ],
+      resultEncoding: 'evm-abi-v1',
+      callRecord: true,
+      modifiers: [
+        'view',
+      ],
+      writesState: false,
+      requiredNftIndices: [
+        0,
+      ],
+      sourceEffectOrder: 'linear',
+      directStateReturn: {
+        variables: [
+          'settledVolume',
+        ],
+      },
+      blockLayout: {
+        blockSize: 3,
+        slots: [
+          {
+            kind: 'master',
+            offset: 0,
+          },
+          {
+            kind: 'dataNft',
+            offset: 1,
+            nftIndex: 0,
+          },
+          {
+            kind: 'returnEvent',
+            offset: 2,
+          },
+        ],
+      },
+    },
+    {
+      name: 'settledAmount',
+      selector: 'e68b8d1f',
+      inputs: [
+        {
+          name: '__getterKey1',
+          type: 'bytes32',
+        },
+        {
+          name: '__internal__genesisCall',
+          type: 'bytes',
+        },
+        {
+          name: '__internal__returnOutputIdx',
+          type: 'bigint',
+        },
+      ],
+      outputs: [
+        {
+          type: 'int256',
+        },
+      ],
+      resultEncoding: 'evm-abi-v1',
+      callRecord: true,
+      modifiers: [
+        'view',
+      ],
+      writesState: false,
+      requiredNftIndices: [],
+      entryAccesses: [
+        {
+          slotIndex: 0,
+          collection: 'settledAmount',
+          keyParams: [
+            '__getterKey1',
+          ],
+          operations: [
+            'read',
+          ],
+        },
+      ],
+      sourceEffectOrder: 'linear',
+      directMappingReturn: {
+        collection: 'settledAmount',
+        keyParams: [
+          '__getterKey1',
+        ],
+      },
+      blockLayout: {
+        blockSize: 3,
+        slots: [
+          {
+            kind: 'master',
+            offset: 0,
+          },
+          {
+            kind: 'entry',
+            offset: 1,
+            slotIndex: 0,
+          },
+          {
+            kind: 'returnEvent',
+            offset: 2,
+          },
+        ],
+      },
+    },
+    {
+      name: '__construct',
+      selector: '90fa17bb',
+      inputs: [],
+      requiredNftIndices: [
+        0,
+      ],
+      blockLayout: {
+        blockSize: 2,
+        slots: [
+          {
+            kind: 'master',
+            offset: 0,
+          },
+          {
+            kind: 'dataNft',
+            offset: 1,
+            nftIndex: 0,
+          },
+        ],
+      },
+    },
+  ],
+  bytecode: '76014c9c636d517f7c01007e817f6776014d9c636d527f7c01007e817f6776014e9c636d547f7c01007e817f67014f9d754f7c686868 91 OP_DEFINE 8263517f7c76817601510161a5630150945180777c6776014c9f63777f6701918a686867007c68 OP_1NEGATE OP_DEFINE 4f8a7c817c OP_3 OP_DEFINE 8276014ba16351807c7e677602ff00a1635280517f75014c7c7e7c7e675380527f75014d7c7e7c7e6868 82 OP_DEFINE 01218001207f75bc OP_7 OP_DEFINE 01207f75 OP_2 OP_DEFINE c0c7c0cd88c0cec0d188 84 OP_DEFINE c0c6c0cc88c0d0c0d3a169 86 OP_DEFINE 01207f75c0ce01207f7588 87 OP_DEFINE 01968a036376c752797e0788ce01207f52887e787e4c7888c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d100886867767676cdc0c788ccc0c6a269d1c0ce88d3c0d0a269c0c7c38c6576c09c6476c75279879169688c76009f667575687e7801988a 88 OP_DEFINE 01207c7e7c01207c7e7cc0c701237c7e7b7b04519d76c753797e0788ce01207f52887e52797e4988c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d10088687e787e0275517e777777aa02aa207c7e01877e 89 OP_DEFINE 6ec78877cf01207f01207f70876377777781677578815379817d9f69788176009c636d679f69686d750068 92 OP_DEFINE 01968a08c0ce01207f518876787e06887c637c76c77e52797e2588ce01207f528888676dc0c7c0cd88c0cec0d188c0cfc0d288c0d3c0d0a269c0c6c0cc88687e1514a1cb00ff010c9cf36b5639d7be592c8c99b492c701988a OP_1 OP_DEFINE 798201208875 OP_12 OP_DEFINE 7452947982638201249d7601227f7701007e8176c9009dc87801207f758801227f7502ffff7c7e7c527f777e677568 OP_13 OP_DEFINE 8252807c7e7e OP_14 OP_DEFINE c0ce528a518a OP_15 OP_DEFINE c0ce528a517ec3658c76009f6375516776c09f6376ce5279876301958a68006776c0547993a26376ce5279876301958a6868006868666d OP_16 OP_DEFINE c0ce8263528a00c4658c76cd810200019701519c78d15479879a7b937c76916675779d676d68 9e OP_DEFINE 7ba8011f7f757b820160a1635167a852687c7e7e7c7600a2637dd28876d1c0ce528a8876d3008876cd015188cc02b004a1676d0068019e8a 9f OP_DEFINE c0ce76528a7601888a78517e006b0000c365658c76ce827778c75679879b78919b6676c75579876376c6537a937b7b6876ce5779877b937c76ce76557987917c82779a636c7853807e6b68769166756c826365537f7c817c6b76c7827701239c6376ce82777601209c7c01219c9b6376ce01207f7576577987637576ce827701209c01938a67bc56797c01898a7c76c77b8701938a686868756c8291666875 a0 OP_DEFINE 54790078c0c77c548a7e78518a7e0000c465658c76d1765979877c5c79879b78cd5a79879b78919b6676cd59019b8a5b79877b937c76d1587987635379007c657682770123a26301237f7c5379cd877b9b7c0067516866757664c3658c5279cd78c787635279d178ce876377517c6868769152799b667568696876916675547aa1697777726d726d a1 OP_DEFINE c0ce01207f75517e4f6bc3658c76ce52798763766b6876009c667500656c76009f6375516776c0765293a56401958a68758b006866c4766365019c8a009c666875009d75 a2 OP_DEFINE 0000c465658c76d159798778cd5879879b78919b6676cd57019b8a5979877b937c769166757ba169726d726d a3 OP_DEFINE 745e9d525c8a5479568a755579568a75575c8a595c8a57796b58796b59796b5a796b52796b57795979810120807e5a797e5b79810120807e7c5d8a53795e8a54795e8a5579815e8a5679815e8a577a537aad537a537978827701209d7ca888537900a0695479519c6351675479529c686901a68a5f8ac0745694799301928a009d01a68a745b947901607f7701207f758101829e63745b947901207f75745b947901207f7701207f7581745b947901407f7701207f756b6b6b6b5379816c766c885f8ac06c936ec788cf01207f01207f5279557987645279815579819f69788176009c637567557981a06968686d75c052936c7c76cd53798876d17601207f77518801878a537952797e55797e7cd2886d6d677568c08bcf538a7c568a778b01a78ac08bcf538a7c568a75538a7c568a7755799301a78a717c01a98a557901a98a1f880088141145337e5fe8dfa66e43ccb9f36c1f7de6f6234275029000b27551c08bce01878ac076c77cce528a01aa8a5f8ac05293c787c05293cf8277929a63c07456947993ce01878ac07456947993ce01207f77518868707ec08bd288c076c77cce528a548a5b8a537a757b756c6c6c6c6c745e947901829e69745e947901829c64019a8a75745f94798801998a8763745e94794f9d67745e94797600a26975745e947976cd74609479c093c78875745e9479d17601207f77518801878a745e9479d201998a7e019a8a777e886868745e947900a28b7460947900a05f8a740114947900c38c6576009f6375516776c75379877b937c8c006866767401139479886d740114947900c48c6576009f6375516776cd5379877b937c8c006866767401129479886d6d75745e947900a25f799d745e947a75745e947a75745e947a75745e947a75745d947a757459947a75c076c77cce528a548a515a8a55608a745b947600a06365769263778c006751686668757c6b6c76c05393d288c0ce01207f7506c0ce01207f7c01207b7e7e52797eaa02aa207c7e01877ec05393cd88c05393d101878ac05393d101207f770088c05393d30088c05393cc02b004a1696d005901a58a65019d8a63558a63765279945354a578748c799c9b6968687691666d7501868a01948a6d6d6d51 8990b603 OP_DEFINE 74549d5d8ac08bcf538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a7551 90327524 OP_DEFINE 74549d5d8ac08bcf538a7c568a75538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a7551 78e70614 OP_DEFINE 74559d525c8a52796b5d8a52795e8a01a68a5f8ac08b01928a76009f588a578ac08b76cf8277926376ce01878a76ce01207f7751886875c08b76cf8277926376cf78d28876ce78d18876c778cd8868755f8a00c08bc7527987935a8ac076c77cce528a548a005a8a53608a5501a58a01a88ac08b76cf8277926376c678cc8876d078d3a169686d6d7551 e68b8d1f OP_DEFINE 74529d00c8527ec0ce8700c9919a690001a78a0001a78ac08bce01878ac076c77cce528a01aa8a6e7ec08bd288c076c77cce528a548a5b8a7c6d00019e8a01848ac0ce01207f75517e00c3658c76ce537987637c8b7c6876009c6675c4766365019c8a009c666875009d7501a08a01a38aa16901868a01948a51 90fa17bb OP_DEFINE 01207c7e7c01237c7e7c032776c752797e04885189217e787e4ca2528976539c63757c518ace01207f5288528a88c0ce01207f5188528a8876cdc0c78876d1c0ce8876d3c0d0a26976ccc0c687776776529c6375518ace01207f5288528a88c0ce01207f5188528a88c0c49f63c0d1826301207f75528a87916967756868516763518ace01207f5288528a7d88c0ce01207f75886775c0ce01207f5188528a88c0cfc0d28868c0c7c0cd88c0cec0d188c0d3c0d0a269c0c6c0cc8768687e7777aa02aa207c7e01877e OP_4 OP_DEFINE 76d3009c78d28277929a78d27682770128a26376557f7505534349440187637682770123947f775379c7876775006867750068919a78cd015187919a OP_5 OP_DEFINE 765102ff008d9301218001207f77010088 OP_6 OP_DEFINE 210000000000000000000000000000000000000000000000000000000000000000019593 OP_8 OP_DEFINE 764f87636d014f6776817651a27c60a19a63758101509351806775517c7e6868 OP_9 OP_DEFINE 00c3658c76c75479877b937c76916675789d00c4658c76cd5479877b937c76916675789d6d OP_10 OP_DEFINE c08bc7788875c08bc7c08bcd88c08bcec08bd188 OP_11 OP_DEFINE 6376cd78c78876d178ce8876d378d0a26976d278cf8876ce76827701219c6301207f775287916967756868 93 OP_DEFINE c08bc6c08bcc88c08bd0c08bd3a1696d 94 OP_DEFINE 76cd78c78876d278cf8876d178ce88 95 OP_DEFINE c0c77c01207c7e7c01237c7e7c 96 OP_DEFINE 630078748c799c9b6968 97 OP_DEFINE 7e0275517e7777aa02aa207c7e01877e 98 OP_DEFINE 74609479c093cf01207f757401119479 99 OP_DEFINE 74609479c093cf01207f7701207f 9a OP_DEFINE 79876376cc537a937b7b6876d1 9b OP_DEFINE 8c76d1537987637c8c7c6876 9c OP_DEFINE 658c76d153798778919b6676d1537987 9d OP_DEFINE 5479019f8a01848a01a28a01a08a01a38aa169c0ce01207f75c0c4 a4 OP_DEFINE 79019f8a01848a01a08a01a18aa169c0ce01207f75c0c4 a5 OP_DEFINE 5279a8011f7f017f847e a6 OP_DEFINE 568a76820087636d01006782518763598a677501828a6868 a7 OP_DEFINE 65019d8a63558a01978a687691666d7501868a a8 OP_DEFINE 76009f588a01218001207f75bc7e a9 OP_DEFINE 548ac08bc788 aa OP_DEFINE OP_DEPTH OP_1SUB OP_ROLL OP_SIZE OP_4 OP_NUMEQUALVERIFY 0000 OP_OVER OP_CAT OP_SWAP OP_INVOKE 1744a65e30fda2209c561da7e1920101f44c313a02 OP_DROP',
+  source: 'pragma solidcash ^0.51.0;\n\n// Hermes swap ledger — a public, append-only record of settled swaps kept by a solver.\n// A swap can only be recorded with the secret that opens its hashlock (so only swaps that\n// actually settled appear), once per hashlock. State lives in CashToken NFTs (SolidCash\n// stateful contract): counters in data NFTs, the per-hashlock amounts in a verified mapping,\n// and every record emits an on-chain `Settled` event NFT.\n\nuint256 constant SECRET_BYTES = 32;\n\nenum Direction { NONE = 0, USDC_TO_PUSD = 1, PUSD_TO_USDC = 2 }\n\nevent Settled(bytes32 indexed hashlock, int amount, int direction);\n\ncontract HermesSwapLedger(pubkey operator) {\n    int public settledCount;\n    int public settledVolume;\n    mapping(bytes32 => int) public settledAmount;\n\n    constructor() {\n        this.settledCount = 0;\n        this.settledVolume = 0;\n    }\n\n    modifier onlyOperator(sig s) {\n        require(checkSig(s, operator), "operator signature required");\n        _;\n    }\n\n    modifier opens(bytes secret, bytes32 hashlock) {\n        require(secret.length == SECRET_BYTES, "secret must be 32 bytes");\n        require(sha256(secret) == hashlock, "secret does not open the hashlock");\n        _;\n    }\n\n    function record(bytes32 hashlock, bytes secret, int amount, int direction, sig s)\n        onlyOperator(s)\n        opens(secret, hashlock)\n    {\n        require(amount > 0, "amount must be positive");\n        require(direction == 1 || direction == 2, "unknown direction");\n        require(this.settledAmount[hashlock] == 0, "already recorded");\n        this.settledAmount[hashlock] = amount;\n        this.settledCount = this.settledCount + 1;\n        this.settledVolume = this.settledVolume + amount;\n        emit Settled(hashlock, amount, direction);\n    }\n}\n',
+  debug: {
+    bytecode: '3676014c9c636d517f7c01007e817f6776014d9c636d527f7c01007e817f6776014e9c636d547f7c01007e817f67014f9d754f7c686868019189278263517f7c76817601510161a5630150945180777c6776014c9f63777f6701918a686867007c684f89054f8a7c817c53892a8276014ba16351807c7e677602ff00a1635280517f75014c7c7e7c7e675380527f75014d7c7e7c7e68680182890801218001207f75bc57890401207f7552890ac0c7c0cd88c0cec0d1880184890bc0c6c0cc88c0d0c0d3a1690186890b01207f75c0ce01207f75880187894c9401968a036376c752797e0788ce01207f52887e787e4c7888c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d100886867767676cdc0c788ccc0c6a269d1c0ce88d3c0d0a269c0c7c38c6576c09c6476c75279879169688c76009f667575687e7801988a0188894c8301207c7e7c01207c7e7cc0c701237c7e7b7b04519d76c753797e0788ce01207f52887e52797e4988c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d10088687e787e0275517e777777aa02aa207c7e01877e0189892b6ec78877cf01207f01207f70876377777781677578815379817d9f69788176009c636d679f69686d7500680192894c5901968a08c0ce01207f518876787e06887c637c76c77e52797e2588ce01207f528888676dc0c7c0cd88c0cec0d188c0cfc0d288c0d3c0d0a269c0c6c0cc88687e1514a1cb00ff010c9cf36b5639d7be592c8c99b492c701988a5189067982012088755c892f7452947982638201249d7601227f7701007e8176c9009dc87801207f758801227f7502ffff7c7e7c527f777e6775685d89068252807c7e7e5e8906c0ce528a518a5f8937c0ce528a517ec3658c76009f6375516776c09f6376ce5279876301958a68006776c0547993a26376ce5279876301958a6868006868666d608926c0ce8263528a00c4658c76cd810200019701519c78d15479879a7b937c76916675779d676d68019e89387ba8011f7f757b820160a1635167a852687c7e7e7c7600a2637dd28876d1c0ce528a8876d3008876cd015188cc02b004a1676d0068019e8a019f894c9fc0ce76528a7601888a78517e006b0000c365658c76ce827778c75679879b78919b6676c75579876376c6537a937b7b6876ce5779877b937c76ce76557987917c82779a636c7853807e6b68769166756c826365537f7c817c6b76c7827701239c6376ce82777601209c7c01219c9b6376ce01207f7576577987637576ce827701209c01938a67bc56797c01898a7c76c77b8701938a686868756c829166687501a0894c8854790078c0c77c548a7e78518a7e0000c465658c76d1765979877c5c79879b78cd5a79879b78919b6676cd59019b8a5b79877b937c76d1587987635379007c657682770123a26301237f7c5379cd877b9b7c0067516866757664c3658c5279cd78c787635279d178ce876377517c6868769152799b667568696876916675547aa1697777726d726d01a18944c0ce01207f75517e4f6bc3658c76ce52798763766b6876009c667500656c76009f6375516776c0765293a56401958a68758b006866c4766365019c8a009c666875009d7501a2892c0000c465658c76d159798778cd5879879b78919b6676cd57019b8a5979877b937c769166757ba169726d726d01a3894d2d03745e9d525c8a5479568a755579568a75575c8a595c8a57796b58796b59796b5a796b52796b57795979810120807e5a797e5b79810120807e7c5d8a53795e8a54795e8a5579815e8a5679815e8a577a537aad537a537978827701209d7ca888537900a0695479519c6351675479529c686901a68a5f8ac0745694799301928a009d01a68a745b947901607f7701207f758101829e63745b947901207f75745b947901207f7701207f7581745b947901407f7701207f756b6b6b6b5379816c766c885f8ac06c936ec788cf01207f01207f5279557987645279815579819f69788176009c637567557981a06968686d75c052936c7c76cd53798876d17601207f77518801878a537952797e55797e7cd2886d6d677568c08bcf538a7c568a778b01a78ac08bcf538a7c568a75538a7c568a7755799301a78a717c01a98a557901a98a1f880088141145337e5fe8dfa66e43ccb9f36c1f7de6f6234275029000b27551c08bce01878ac076c77cce528a01aa8a5f8ac05293c787c05293cf8277929a63c07456947993ce01878ac07456947993ce01207f77518868707ec08bd288c076c77cce528a548a5b8a537a757b756c6c6c6c6c745e947901829e69745e947901829c64019a8a75745f94798801998a8763745e94794f9d67745e94797600a26975745e947976cd74609479c093c78875745e9479d17601207f77518801878a745e9479d201998a7e019a8a777e886868745e947900a28b7460947900a05f8a740114947900c38c6576009f6375516776c75379877b937c8c006866767401139479886d740114947900c48c6576009f6375516776cd5379877b937c8c006866767401129479886d6d75745e947900a25f799d745e947a75745e947a75745e947a75745e947a75745d947a757459947a75c076c77cce528a548a515a8a55608a745b947600a06365769263778c006751686668757c6b6c76c05393d288c0ce01207f7506c0ce01207f7c01207b7e7e52797eaa02aa207c7e01877ec05393cd88c05393d101878ac05393d101207f770088c05393d30088c05393cc02b004a1696d005901a58a65019d8a63558a63765279945354a578748c799c9b6968687691666d7501868a01948a6d6d6d51048990b603894274549d5d8ac08bcf538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a75510490327524894874549d5d8ac08bcf538a7c568a75538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a75510478e70614894c8a74559d525c8a52796b5d8a52795e8a01a68a5f8ac08b01928a76009f588a578ac08b76cf8277926376ce01878a76ce01207f7751886875c08b76cf8277926376cf78d28876ce78d18876c778cd8868755f8a00c08bc7527987935a8ac076c77cce528a548a005a8a53608a5501a58a01a88ac08b76cf8277926376c678cc8876d078d3a169686d6d755104e68b8d1f894c7a74529d00c8527ec0ce8700c9919a690001a78a0001a78ac08bce01878ac076c77cce528a01aa8a6e7ec08bd288c076c77cce528a548a5b8a7c6d00019e8a01848ac0ce01207f75517e00c3658c76ce537987637c8b7c6876009c6675c4766365019c8a009c666875009d7501a08a01a38aa16901868a01948a510490fa17bb894cc901207c7e7c01237c7e7c032776c752797e04885189217e787e4ca2528976539c63757c518ace01207f5288528a88c0ce01207f5188528a8876cdc0c78876d1c0ce8876d3c0d0a26976ccc0c687776776529c6375518ace01207f5288528a88c0ce01207f5188528a88c0c49f63c0d1826301207f75528a87916967756868516763518ace01207f5288528a7d88c0ce01207f75886775c0ce01207f5188528a88c0cfc0d28868c0c7c0cd88c0cec0d188c0d3c0d0a269c0c6c0cc8768687e7777aa02aa207c7e01877e54893c76d3009c78d28277929a78d27682770128a26376557f7505534349440187637682770123947f775379c7876775006867750068919a78cd015187919a558911765102ff008d9301218001207f77010088568924210000000000000000000000000000000000000000000000000000000000000000019593588920764f87636d014f6776817651a27c60a19a63758101509351806775517c7e686859892500c3658c76c75479877b937c76916675789d00c4658c76cd5479877b937c76916675789d6d5a8914c08bc7788875c08bc7c08bcd88c08bcec08bd1885b892b6376cd78c78876d178ce8876d378d0a26976d278cf8876ce76827701219c6301207f77528791696775686801938910c08bc6c08bcc88c08bd0c08bd3a1696d0194890f76cd78c78876d278cf8876d178ce880195890dc0c77c01207c7e7c01237c7e7c0196890a630078748c799c9b6968019789107e0275517e7777aa02aa207c7e01877e0198891074609479c093cf01207f7574011194790199890e74609479c093cf01207f7701207f019a890d79876376cc537a937b7b6876d1019b890c8c76d1537987637c8c7c6876019c8910658c76d153798778919b6676d1537987019d891b5479019f8a01848a01a28a01a08a01a38aa169c0ce01207f75c0c401a4891779019f8a01848a01a08a01a18aa169c0ce01207f75c0c401a5890a5279a8011f7f017f847e01a68918568a76820087636d01006782518763598a677501828a686801a7891365019d8a63558a01978a687691666d7501868a01a8890e76009f588a01218001207f75bc7e01a98906548ac08bc78801aa89748c7a82549d020000787e7c8a151744a65e30fda2209c561da7e1920101f44c313a0275',
+    sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;36:4:47:5;;;16::16:28;;;17::17:29;;;18::18:49;;;20::23:5;;;15:0:48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;',
+    logs: [],
+    requires: [],
+    functionDebug: {
+      '90327524': {
+        requires: [],
+        logs: [],
+        sourceMap: '16:4:16:28;;;;;;;;;;;;;;::::1;;;;;;;::::0;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '8990b603': {
+        requires: [
+          {
+            ip: 79,
+            line: 26,
+            message: 'operator signature required',
+          },
+          {
+            ip: 88,
+            line: 31,
+            message: 'secret must be 32 bytes',
+          },
+          {
+            ip: 91,
+            line: 32,
+            message: 'secret does not open the hashlock',
+          },
+          {
+            ip: 96,
+            line: 40,
+            message: 'amount must be positive',
+          },
+          {
+            ip: 109,
+            line: 41,
+            message: 'unknown direction',
+          },
+          {
+            ip: 123,
+            line: 42,
+            message: 'already recorded',
+          },
+          {
+            ip: 223,
+            line: 43,
+          },
+          {
+            ip: 224,
+            line: 43,
+          },
+          {
+            ip: 225,
+            line: 43,
+          },
+          {
+            ip: 228,
+            line: 43,
+          },
+          {
+            ip: 229,
+            line: 43,
+          },
+          {
+            ip: 230,
+            line: 43,
+          },
+          {
+            ip: 231,
+            line: 43,
+          },
+          {
+            ip: 232,
+            line: 43,
+          },
+          {
+            ip: 233,
+            line: 43,
+          },
+          {
+            ip: 234,
+            line: 43,
+          },
+          {
+            ip: 235,
+            line: 43,
+          },
+          {
+            ip: 236,
+            line: 43,
+          },
+          {
+            ip: 237,
+            line: 43,
+          },
+          {
+            ip: 238,
+            line: 43,
+          },
+          {
+            ip: 239,
+            line: 43,
+          },
+          {
+            ip: 240,
+            line: 43,
+          },
+          {
+            ip: 241,
+            line: 43,
+          },
+          {
+            ip: 242,
+            line: 43,
+          },
+          {
+            ip: 243,
+            line: 43,
+          },
+          {
+            ip: 244,
+            line: 43,
+          },
+          {
+            ip: 245,
+            line: 43,
+          },
+          {
+            ip: 246,
+            line: 43,
+          },
+          {
+            ip: 247,
+            line: 43,
+          },
+          {
+            ip: 248,
+            line: 43,
+          },
+          {
+            ip: 249,
+            line: 43,
+          },
+          {
+            ip: 250,
+            line: 43,
+          },
+          {
+            ip: 251,
+            line: 43,
+          },
+          {
+            ip: 252,
+            line: 43,
+          },
+          {
+            ip: 253,
+            line: 43,
+          },
+        ],
+        logs: [],
+        sourceMap: '36:4:47:5;;;:20:36:36;;;:52::62;;;;;:64::77;;;;;:4:47:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;37:21:37:22;;26:28:26:36;;:8::70:1;38:14:38:20:0;;:22::30;;31:16:31:22;:::29:1;;9:32:9:34:0;31:8:31:74:1;32:23:32:29:0;:16::30:1;:8::81;40:16:40:22:0;;:25::26;:16:::1;:8::55;41:16:41:25:0;;:29::30;:16:::1;:::48:0;;::::1;:34::43:0;;:47::48;:34:::1;:16;:8::71;42:16:42:44:0;;;;;;;;;;;;:48::49;:8::71:1;43::43:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:39::45:0;;:8::46:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;44:28:44:45:0;;;;;;;;;:::49:1;;;45:29:45:47:0;;;;;;;;;;;;;;;:50::56;;:29:::1;;;46:21:46:37:0;;:8::50:1;;:39::48:0;;:8::50:1;;;36:4:47:5:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;;;::::0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '78e70614': {
+        requires: [],
+        logs: [],
+        sourceMap: '17:4:17:29;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;::::0;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      e68b8d1f: {
+        requires: [
+          {
+            ip: 30,
+            line: 18,
+          },
+          {
+            ip: 31,
+            line: 18,
+          },
+          {
+            ip: 31,
+            line: 18,
+          },
+          {
+            ip: 51,
+            line: 18,
+          },
+          {
+            ip: 52,
+            line: 18,
+          },
+          {
+            ip: 52,
+            line: 18,
+          },
+          {
+            ip: 108,
+            line: 18,
+          },
+          {
+            ip: 109,
+            line: 18,
+          },
+          {
+            ip: 109,
+            line: 18,
+          },
+        ],
+        logs: [],
+        sourceMap: '18:4:18:49;;;;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;::::0;;;;;;;;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '90fa17bb': {
+        requires: [
+          {
+            ip: 14,
+            line: 20,
+            message: 'a constructor runs only in its genesis',
+          },
+        ],
+        logs: [],
+        sourceMap: '20:4:23:5;;;;;;;;;;;;;;;21:28:21:29;:8::30:1;;22:29:22::0;:8::31:1;;20:4:23:5:0;;;;;;;;;;;;;;::::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+    },
+    invokeDebug: {
+      '1': {
+        bytecode: '01968a08c0ce01207f518876787e06887c637c76c77e52797e2588ce01207f528888676dc0c7c0cd88c0cec0d188c0cfc0d288c0d3c0d0a269c0c6c0cc88687e1514a1cb00ff010c9cf36b5639d7be592c8c99b492c701988a',
+        name: 'compiler helper 1',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;',
+      },
+      '2': {
+        bytecode: '01207f75',
+        name: 'compiler helper 2',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;',
+      },
+      '4': {
+        bytecode: '01207c7e7c01237c7e7c032776c752797e04885189217e787e4ca2528976539c63757c518ace01207f5288528a88c0ce01207f5188528a8876cdc0c78876d1c0ce8876d3c0d0a26976ccc0c687776776529c6375518ace01207f5288528a88c0ce01207f5188528a88c0c49f63c0d1826301207f75528a87916967756868516763518ace01207f5288528a7d88c0ce01207f75886775c0ce01207f5188528a88c0cfc0d28868c0c7c0cd88c0cec0d188c0d3c0d0a269c0c6c0cc8768687e7777aa02aa207c7e01877e',
+        name: 'outlined source span 4',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '5': {
+        bytecode: '76d3009c78d28277929a78d27682770128a26376557f7505534349440187637682770123947f775379c7876775006867750068919a78cd015187919a',
+        name: 'outlined source span 5',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '6': {
+        bytecode: '765102ff008d9301218001207f77010088',
+        name: 'outlined source span 6',
+        requires: [],
+        logs: [],
+        sourceMap: '36:52:36:62;;;;;;;;;;;',
+      },
+      '7': {
+        bytecode: '01218001207f75bc',
+        name: 'compiler helper 7',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;',
+      },
+      '8': {
+        bytecode: '210000000000000000000000000000000000000000000000000000000000000000019593',
+        name: 'outlined source span 8',
+        requires: [],
+        logs: [],
+        sourceMap: '46:8:46:50:1;;',
+      },
+      '9': {
+        bytecode: '764f87636d014f6776817651a27c60a19a63758101509351806775517c7e6868',
+        name: 'outlined source span 9',
+        requires: [],
+        logs: [],
+        sourceMap: '44:8:44:50:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '10': {
+        bytecode: '00c3658c76c75479877b937c76916675789d00c4658c76cd5479877b937c76916675789d6d',
+        name: 'outlined source span 10',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '11': {
+        bytecode: 'c08bc7788875c08bc7c08bcd88c08bcec08bd188',
+        name: 'outlined source span 11',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;;;;;',
+      },
+      '12': {
+        bytecode: '798201208875',
+        name: 'compiler helper 12',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;',
+      },
+      '13': {
+        bytecode: '7452947982638201249d7601227f7701007e8176c9009dc87801207f758801227f7502ffff7c7e7c527f777e677568',
+        name: 'compiler helper 13',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '14': {
+        bytecode: '8252807c7e7e',
+        name: 'compiler helper 14',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;',
+      },
+      '15': {
+        bytecode: 'c0ce528a518a',
+        name: 'compiler helper 15',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;',
+      },
+      '16': {
+        bytecode: 'c0ce528a517ec3658c76009f6375516776c09f6376ce5279876301958a68006776c0547993a26376ce5279876301958a6868006868666d',
+        name: 'compiler helper 16',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-2': {
+        bytecode: '8276014ba16351807c7e677602ff00a1635280517f75014c7c7e7c7e675380527f75014d7c7e7c7e6868',
+        name: 'compiler helper -2',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-4': {
+        bytecode: 'c0c7c0cd88c0cec0d188',
+        name: 'compiler helper -4',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;',
+      },
+      '-6': {
+        bytecode: 'c0c6c0cc88c0d0c0d3a169',
+        name: 'compiler helper -6',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;',
+      },
+      '-7': {
+        bytecode: '01207f75c0ce01207f7588',
+        name: 'compiler helper -7',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;',
+      },
+      '-8': {
+        bytecode: '01968a036376c752797e0788ce01207f52887e787e4c7888c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d100886867767676cdc0c788ccc0c6a269d1c0ce88d3c0d0a269c0c7c38c6576c09c6476c75279879169688c76009f667575687e7801988a',
+        name: 'compiler helper -8',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;',
+      },
+      '-9': {
+        bytecode: '01207c7e7c01207c7e7cc0c701237c7e7b7b04519d76c753797e0788ce01207f52887e52797e4988c076cd78c7876376ce82776376d101207f757cce01207f75886775686776cd23aa20c42c11d1b80f1eae4c024fc765dd0c57701ca3a974579f9bbe600079e059b4f58788d10088687e787e0275517e777777aa02aa207c7e01877e',
+        name: 'compiler helper -9',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-18': {
+        bytecode: '6ec78877cf01207f01207f70876377777781677578815379817d9f69788176009c636d679f69686d750068',
+        name: 'compiler helper -18',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-30': {
+        bytecode: 'c0ce8263528a00c4658c76cd810200019701519c78d15479879a7b937c76916675779d676d68',
+        name: 'compiler helper -30',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-31': {
+        bytecode: '7ba8011f7f757b820160a1635167a852687c7e7e7c7600a2637dd28876d1c0ce528a8876d3008876cd015188cc02b004a1676d0068019e8a',
+        name: 'compiler helper -31',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-32': {
+        bytecode: 'c0ce76528a7601888a78517e006b0000c365658c76ce827778c75679879b78919b6676c75579876376c6537a937b7b6876ce5779877b937c76ce76557987917c82779a636c7853807e6b68769166756c826365537f7c817c6b76c7827701239c6376ce82777601209c7c01219c9b6376ce01207f7576577987637576ce827701209c01938a67bc56797c01898a7c76c77b8701938a686868756c8291666875',
+        name: 'compiler helper -32',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-33': {
+        bytecode: '54790078c0c77c548a7e78518a7e0000c465658c76d1765979877c5c79879b78cd5a79879b78919b6676cd59019b8a5b79877b937c76d1587987635379007c657682770123a26301237f7c5379cd877b9b7c0067516866757664c3658c5279cd78c787635279d178ce876377517c6868769152799b667568696876916675547aa1697777726d726d',
+        name: 'compiler helper -33',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-34': {
+        bytecode: 'c0ce01207f75517e4f6bc3658c76ce52798763766b6876009c667500656c76009f6375516776c0765293a56401958a68758b006866c4766365019c8a009c666875009d75',
+        name: 'compiler helper -34',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-35': {
+        bytecode: '0000c465658c76d159798778cd5879879b78919b6676cd57019b8a5979877b937c769166757ba169726d726d',
+        name: 'compiler helper -35',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-19': {
+        bytecode: '6376cd78c78876d178ce8876d378d0a26976d278cf8876ce76827701219c6301207f775287916967756868',
+        name: 'outlined source span -19',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-20': {
+        bytecode: 'c08bc6c08bcc88c08bd0c08bd3a1696d',
+        name: 'outlined source span -20',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;',
+      },
+      '-21': {
+        bytecode: '76cd78c78876d278cf8876d178ce88',
+        name: 'outlined source span -21',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;;;',
+      },
+      '-22': {
+        bytecode: 'c0c77c01207c7e7c01237c7e7c',
+        name: 'outlined source span -22',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;',
+      },
+      '-23': {
+        bytecode: '630078748c799c9b6968',
+        name: 'outlined source span -23',
+        requires: [],
+        logs: [],
+        sourceMap: '16:4:16:28:1;;;;;;;;;',
+      },
+      '-24': {
+        bytecode: '7e0275517e7777aa02aa207c7e01877e',
+        name: 'outlined source span -24',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;',
+      },
+      '-25': {
+        bytecode: '74609479c093cf01207f757401119479',
+        name: 'outlined source span -25',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5;;;;;;;;;;;;;',
+      },
+      '-26': {
+        bytecode: '74609479c093cf01207f7701207f',
+        name: 'outlined source span -26',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5;;;;;;;;;;;',
+      },
+      '-27': {
+        bytecode: '79876376cc537a937b7b6876d1',
+        name: 'outlined source span -27',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;;',
+      },
+      '-28': {
+        bytecode: '8c76d1537987637c8c7c6876',
+        name: 'outlined source span -28',
+        requires: [],
+        logs: [],
+        sourceMap: '15::48:1;;;;;;;;;;;',
+      },
+      '-29': {
+        bytecode: '658c76d153798778919b6676d1537987',
+        name: 'outlined source span -29',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;',
+      },
+      '-36': {
+        bytecode: '5479019f8a01848a01a28a01a08a01a38aa169c0ce01207f75c0c4',
+        name: 'outlined source span -36',
+        requires: [],
+        logs: [],
+        sourceMap: '16:4:16:28:1;;;;;;;;;;;;;;;;;;;;',
+      },
+      '-37': {
+        bytecode: '79019f8a01848a01a08a01a18aa169c0ce01207f75c0c4',
+        name: 'outlined source span -37',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5:1;;;;;;;;;;;;;;;;;',
+      },
+      '-38': {
+        bytecode: '5279a8011f7f017f847e',
+        name: 'outlined source span -38',
+        requires: [],
+        logs: [],
+        sourceMap: '42:16:42:44;;;;;;;',
+      },
+      '-39': {
+        bytecode: '568a76820087636d01006782518763598a677501828a6868',
+        name: 'outlined source span -39',
+        requires: [],
+        logs: [],
+        sourceMap: '44:28:44:49:1;;:8::50;;;;;;;;;;;;;;;;;;;',
+      },
+      '-40': {
+        bytecode: '65019d8a63558a01978a687691666d7501868a',
+        name: 'outlined source span -40',
+        requires: [],
+        logs: [],
+        sourceMap: '16:4:16:28:1;;;;;;;;;;;;;;;',
+      },
+      '-41': {
+        bytecode: '76009f588a01218001207f75bc7e',
+        name: 'outlined source span -41',
+        requires: [],
+        logs: [],
+        sourceMap: '46:8:46:50:1;;;;;;;;;;;',
+      },
+      '-42': {
+        bytecode: '548ac08bc788',
+        name: 'outlined source span -42',
+        requires: [],
+        logs: [],
+        sourceMap: '36:4:47:5;;;;;',
+      },
+    },
+  },
+  callRecords: 'returning',
+  genesisCalls: true,
+  recordSound: true,
+  functionBodies: {
+    '90327524': '74549d5d8ac08bcf538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a7551',
+    '8990b603': '745e9d525c8a5479568a755579568a75575c8a595c8a57796b58796b59796b5a796b52796b57795979810120807e5a797e5b79810120807e7c5d8a53795e8a54795e8a5579815e8a5679815e8a577a537aad537a537978827701209d7ca888537900a0695479519c6351675479529c686901a68a5f8ac0745694799301928a009d01a68a745b947901607f7701207f758101829e63745b947901207f75745b947901207f7701207f7581745b947901407f7701207f756b6b6b6b5379816c766c885f8ac06c936ec788cf01207f01207f5279557987645279815579819f69788176009c637567557981a06968686d75c052936c7c76cd53798876d17601207f77518801878a537952797e55797e7cd2886d6d677568c08bcf538a7c568a778b01a78ac08bcf538a7c568a75538a7c568a7755799301a78a717c01a98a557901a98a1f880088141145337e5fe8dfa66e43ccb9f36c1f7de6f6234275029000b27551c08bce01878ac076c77cce528a01aa8a5f8ac05293c787c05293cf8277929a63c07456947993ce01878ac07456947993ce01207f77518868707ec08bd288c076c77cce528a548a5b8a537a757b756c6c6c6c6c745e947901829e69745e947901829c64019a8a75745f94798801998a8763745e94794f9d67745e94797600a26975745e947976cd74609479c093c78875745e9479d17601207f77518801878a745e9479d201998a7e019a8a777e886868745e947900a28b7460947900a05f8a740114947900c38c6576009f6375516776c75379877b937c8c006866767401139479886d740114947900c48c6576009f6375516776cd5379877b937c8c006866767401129479886d6d75745e947900a25f799d745e947a75745e947a75745e947a75745e947a75745d947a757459947a75c076c77cce528a548a515a8a55608a745b947600a06365769263778c006751686668757c6b6c76c05393d288c0ce01207f7506c0ce01207f7c01207b7e7e52797eaa02aa207c7e01877ec05393cd88c05393d101878ac05393d101207f770088c05393d30088c05393cc02b004a1696d005901a58a65019d8a63558a63765279945354a578748c799c9b6968687691666d7501868a01948a6d6d6d51',
+    '78e70614': '74549d5d8ac08bcf538a7c568a75538a7c568a7776009f588a578ac08bce01878ac076c77cce528a01aa8ac08bcfc08bd288c076c77cce528a548a5b8a01a48a01a88a01948a7551',
+    e68b8d1f: '74559d525c8a52796b5d8a52795e8a01a68a5f8ac08b01928a76009f588a578ac08b76cf8277926376ce01878a76ce01207f7751886875c08b76cf8277926376cf78d28876ce78d18876c778cd8868755f8a00c08bc7527987935a8ac076c77cce528a548a005a8a53608a5501a58a01a88ac08b76cf8277926376c678cc8876d078d3a169686d6d7551',
+    '90fa17bb': '74529d00c8527ec0ce8700c9919a690001a78a0001a78ac08bce01878ac076c77cce528a01aa8a6e7ec08bd288c076c77cce528a548a5b8a7c6d00019e8a01848ac0ce01207f75517e00c3658c76ce537987637c8b7c6876009c6675c4766365019c8a009c666875009d7501a08a01a38aa16901868a01948a51',
+  },
+  fingerprint: '7c96cdd1aeeb41db17dde3ae79a6c2aa7220876960e05bc967ba76da32a7e491',
+  stateLayout: {
+    variables: [
+      {
+        name: 'settledCount',
+        type: 'int256',
+        nftIndex: 0,
+        fieldIndex: 0,
+      },
+      {
+        name: 'settledVolume',
+        type: 'int256',
+        nftIndex: 0,
+        fieldIndex: 1,
+      },
+    ],
+    dataNftCount: 1,
+    commitmentLimit: 1000000,
+    constructorInputs: [],
+    collections: [
+      {
+        name: 'settledAmount',
+        signature: 'settledAmount:mapping(bytes32 => int256)',
+        kind: 'mapping',
+        keyType: 'bytes32',
+        valueType: 'int256',
+        sorted: true,
+      },
+    ],
+    mappings: [
+      {
+        name: 'settledAmount',
+        signature: 'settledAmount:mapping(bytes32 => int256)',
+        kind: 'mapping',
+        keyType: 'bytes32',
+        valueType: 'int256',
+        sorted: true,
+      },
+    ],
+  },
+  events: [
+    {
+      name: 'Settled',
+      signature: 'Settled(bytes32,int256,int256)',
+      parameters: [
+        {
+          name: 'hashlock',
+          type: 'bytes32',
+          indexed: true,
+          notation: 'evm',
+        },
+        {
+          name: 'amount',
+          type: 'int256',
+          notation: 'evm',
+        },
+        {
+          name: 'direction',
+          type: 'int256',
+          notation: 'evm',
+        },
+      ],
+    },
+  ],
+  enums: [
+    {
+      name: 'Direction',
+      members: [
+        {
+          name: 'NONE',
+          value: '0',
+        },
+        {
+          name: 'USDC_TO_PUSD',
+          value: '1',
+        },
+        {
+          name: 'PUSD_TO_USDC',
+          value: '2',
+        },
+      ],
+    },
+  ],
+  compiler: {
+    name: 'solidc',
+    version: '0.51.1',
+    options: {
+      evmCompat: true,
+      enforceFunctionParameterTypes: true,
+      enforceLocktimeGuard: true,
+      enforceFinalRequire: true,
+      allowUnsafeOperations: false,
+      commitmentLimit: 1000000,
+      messageBus: false,
+    },
+  },
+  updatedAt: '2026-11-20T19:11:38.199Z',
+  invocationAnalysis: {
+    version: 1,
+    protocolVersions: [
+      1,
+    ],
+    functions: [
+      {
+        id: 0,
+        name: 'record',
+        arity: 5,
+        entryPoint: true,
+        selector: '8990b603',
+        calls: [],
+        closure: [
+          0,
+        ],
+        component: 0,
+        recursive: false,
+        reads: [
+          'collection:settledAmount:*',
+          'state:settledCount',
+          'state:settledVolume',
+        ],
+        writes: [
+          'collection:settledAmount:*',
+          'state:settledCount',
+          'state:settledVolume',
+        ],
+        effects: [
+          'events',
+        ],
+        unknown: false,
+        bounded: true,
+        maximumDirectInvocations: 0,
+        emits: [
+          {
+            eventName: 'Settled',
+            eventSignature: 'Settled(bytes32,int256,int256)',
+            emitIndex: 0,
+          },
+        ],
+        blockLayout: {
+          blockSize: 5,
+          slots: [
+            {
+              kind: 'master',
+              offset: 0,
+            },
+            {
+              kind: 'dataNft',
+              offset: 1,
+              nftIndex: 0,
+            },
+            {
+              kind: 'entry',
+              offset: 2,
+              slotIndex: 0,
+            },
+            {
+              kind: 'event',
+              offset: 3,
+              slotIndex: 0,
+            },
+            {
+              kind: 'returnEvent',
+              offset: 4,
+            },
+          ],
+        },
+      },
+      {
+        id: 1,
+        name: 'settledCount',
+        arity: 0,
+        entryPoint: true,
+        selector: '90327524',
+        calls: [],
+        closure: [
+          1,
+        ],
+        component: 1,
+        recursive: false,
+        reads: [
+          'state:settledCount',
+        ],
+        writes: [],
+        effects: [],
+        unknown: false,
+        outputs: [
+          {
+            type: 'int256',
+          },
+        ],
+        bounded: true,
+        maximumDirectInvocations: 0,
+        blockLayout: {
+          blockSize: 3,
+          slots: [
+            {
+              kind: 'master',
+              offset: 0,
+            },
+            {
+              kind: 'dataNft',
+              offset: 1,
+              nftIndex: 0,
+            },
+            {
+              kind: 'returnEvent',
+              offset: 2,
+            },
+          ],
+        },
+      },
+      {
+        id: 2,
+        name: 'settledVolume',
+        arity: 0,
+        entryPoint: true,
+        selector: '78e70614',
+        calls: [],
+        closure: [
+          2,
+        ],
+        component: 2,
+        recursive: false,
+        reads: [
+          'state:settledVolume',
+        ],
+        writes: [],
+        effects: [],
+        unknown: false,
+        outputs: [
+          {
+            type: 'int256',
+          },
+        ],
+        bounded: true,
+        maximumDirectInvocations: 0,
+        blockLayout: {
+          blockSize: 3,
+          slots: [
+            {
+              kind: 'master',
+              offset: 0,
+            },
+            {
+              kind: 'dataNft',
+              offset: 1,
+              nftIndex: 0,
+            },
+            {
+              kind: 'returnEvent',
+              offset: 2,
+            },
+          ],
+        },
+      },
+      {
+        id: 3,
+        name: 'settledAmount',
+        arity: 1,
+        entryPoint: true,
+        selector: 'e68b8d1f',
+        calls: [],
+        closure: [
+          3,
+        ],
+        component: 3,
+        recursive: false,
+        reads: [
+          'collection:settledAmount:*',
+        ],
+        writes: [],
+        effects: [],
+        unknown: false,
+        outputs: [
+          {
+            type: 'int256',
+          },
+        ],
+        bounded: true,
+        maximumDirectInvocations: 0,
+        blockLayout: {
+          blockSize: 3,
+          slots: [
+            {
+              kind: 'master',
+              offset: 0,
+            },
+            {
+              kind: 'entry',
+              offset: 1,
+              slotIndex: 0,
+            },
+            {
+              kind: 'returnEvent',
+              offset: 2,
+            },
+          ],
+        },
+      },
+    ],
+    components: [
+      {
+        id: 0,
+        functions: [
+          0,
+        ],
+        recursive: false,
+      },
+      {
+        id: 1,
+        functions: [
+          1,
+        ],
+        recursive: false,
+      },
+      {
+        id: 2,
+        functions: [
+          2,
+        ],
+        recursive: false,
+      },
+      {
+        id: 3,
+        functions: [
+          3,
+        ],
+        recursive: false,
+      },
+    ],
+  },
+} as const;

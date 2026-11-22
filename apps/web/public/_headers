@@ -1,0 +1,21 @@
+# Response headers for the static build (apps/web/dist) — read by Netlify and Cloudflare Pages.
+# Keep in sync with vercel.json (tests/web-shell.test.ts checks they match).
+# connect-src allows any wss:/https: because relays, Electrum servers and EVM RPCs are user-configurable (Settings);
+# ws://localhost is for `pnpm dev:relay`.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws://localhost:* ws://127.0.0.1:*; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+/index.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

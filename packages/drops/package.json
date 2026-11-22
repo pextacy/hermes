@@ -1,0 +1,26 @@
+{
+  "name": "@hermes/drops",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./demo": "./src/demo.ts"
+  },
+  "scripts": {
+    "compile": "cashc contracts/DropsShard.cash -o artifacts/DropsShard.json && cashc contracts/DropsVault.cash -o artifacts/DropsVault.json && cashc contracts/DropsPending.cash -o artifacts/DropsPending.json",
+    "deploy:chipnet": "tsx src/cli.ts deploy --network chipnet",
+    "demo:mock": "tsx src/cli.ts demo"
+  },
+  "dependencies": {
+    "@hermes/chain": "workspace:*",
+    "@bitauth/libauth": "3.1.0-next.8",
+    "@noble/hashes": "^2.0.0",
+    "cashscript": "^0.14.0",
+    "seek-bzip": "^2.0.0"
+  },
+  "devDependencies": {
+    "cashc": "^0.14.0",
+    "tsx": "^4.19.2"
+  }
+}

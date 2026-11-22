@@ -1,0 +1,39 @@
+pragma cashscript ^0.14.0;
+
+// Hermes HTLC — BCH side of a USDC ⇄ PUSD atomic swap.
+//
+// The same semantics are implemented three times (XO template, SolidCash, CashScript);
+// see docs/PLAN.md §4.3. Hashlock is SHA-256 on both chains; the preimage must be 32 bytes.
+// Works for plain BCH and for CashTokens (PUSD): the paid-out output must carry the same
+// token category and amount as the locked UTXO.
+contract HermesHtlc(
+    bytes20 recipientPkh,  // who can claim with the preimage
+    bytes20 refundPkh,     // who locked the funds and can refund after the timeout
+    bytes32 hashlock,      // SHA-256(secret)
+    int timeout            // absolute locktime (unix seconds ≥ 500,000,000 or block height)
+) {
+    function claim(pubkey recipientPk, sig recipientSig, bytes preimage) {
+        require(preimage.length == 32);
+        require(sha256(preimage) == hashlock);
+        require(hash160(recipientPk) == recipientPkh);
+        require(checkSig(recipientSig, recipientPk));
+
+        int i = this.activeInputIndex;
+        require(tx.outputs[i].lockingBytecode == new LockingBytecodeP2PKH(recipientPkh));
+        require(tx.outputs[i].tokenCategory == tx.inputs[i].tokenCategory);
+        require(tx.outputs[i].tokenAmount == tx.inputs[i].tokenAmount);
+        require(tx.outputs[i].value >= tx.inputs[i].value - 3000);
+    }
+
+    function refund(pubkey refundPk, sig refundSig) {
+        require(tx.time >= timeout);
+        require(hash160(refundPk) == refundPkh);
+        require(checkSig(refundSig, refundPk));
+
+        int i = this.activeInputIndex;
+        require(tx.outputs[i].lockingBytecode == new LockingBytecodeP2PKH(refundPkh));
+        require(tx.outputs[i].tokenCategory == tx.inputs[i].tokenCategory);
+        require(tx.outputs[i].tokenAmount == tx.inputs[i].tokenAmount);
+        require(tx.outputs[i].value >= tx.inputs[i].value - 3000);
+    }
+}

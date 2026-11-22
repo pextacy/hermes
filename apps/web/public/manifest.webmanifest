@@ -1,0 +1,17 @@
+{
+  "name": "Hermes — pay a person, across chains",
+  "short_name": "Hermes",
+  "description": "Identity-native, cross-chain dollar rail for Bitcoin Cash: pay a Nostr identity, swap USDC ⇄ PUSD with HTLCs, claim rewards with Merkle proofs.",
+  "id": "./",
+  "start_url": "./#pay",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3eee3",
+  "theme_color": "#0e1a2b",
+  "icons": [
+    { "src": "hermes.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

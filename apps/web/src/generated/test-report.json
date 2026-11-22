@@ -1,0 +1,301 @@
+{
+  "generatedAt": "2026-11-21T22:16:55.389Z",
+  "runner": "vitest",
+  "totals": {
+    "suites": 36,
+    "tests": 577,
+    "passed": 577,
+    "failed": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "file": "tests/chain.test.ts",
+      "tests": 45,
+      "passed": 45,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 587
+    },
+    {
+      "file": "tests/cli.test.ts",
+      "tests": 24,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 4707
+    },
+    {
+      "file": "tests/drops-cli.test.ts",
+      "tests": 33,
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 24934
+    },
+    {
+      "file": "tests/drops-e2e.test.ts",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 13487
+    },
+    {
+      "file": "tests/drops-features.test.ts",
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 35319
+    },
+    {
+      "file": "tests/drops.test.ts",
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 17843
+    },
+    {
+      "file": "tests/features.test.ts",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2129
+    },
+    {
+      "file": "tests/id-extra.test.ts",
+      "tests": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 152
+    },
+    {
+      "file": "tests/id-nft-e2e.test.ts",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 1112
+    },
+    {
+      "file": "tests/id.test.ts",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 183
+    },
+    {
+      "file": "tests/identity-features.test.ts",
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 3724
+    },
+    {
+      "file": "tests/pay-features.test.ts",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 53
+    },
+    {
+      "file": "tests/pay.test.ts",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 1128
+    },
+    {
+      "file": "tests/round3-claims.test.ts",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 8790
+    },
+    {
+      "file": "tests/round3-dev.test.ts",
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 121
+    },
+    {
+      "file": "tests/round3-identity.test.ts",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 243
+    },
+    {
+      "file": "tests/round3-pay.test.ts",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 530
+    },
+    {
+      "file": "tests/round3-shell.test.ts",
+      "tests": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 13
+    },
+    {
+      "file": "tests/round3-swap.test.ts",
+      "tests": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 13299
+    },
+    {
+      "file": "tests/solid-lifecycle.test.ts",
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2944
+    },
+    {
+      "file": "tests/solver-e2e.test.ts",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 11163
+    },
+    {
+      "file": "tests/solver-unit.test.ts",
+      "tests": 33,
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2846
+    },
+    {
+      "file": "tests/swap-e2e.test.ts",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2175
+    },
+    {
+      "file": "tests/swap-features.test.ts",
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2
+    },
+    {
+      "file": "tests/swap-simulator.test.ts",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 4444
+    },
+    {
+      "file": "tests/swap.test.ts",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 1264
+    },
+    {
+      "file": "tests/verifier-errors.test.ts",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 154
+    },
+    {
+      "file": "tests/verifier.test.ts",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 67
+    },
+    {
+      "file": "tests/watcher-alerts.test.ts",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 33
+    },
+    {
+      "file": "tests/watcher.test.ts",
+      "tests": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 7249
+    },
+    {
+      "file": "tests/web-lib.test.ts",
+      "tests": 39,
+      "passed": 39,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 126
+    },
+    {
+      "file": "tests/web-shell.test.ts",
+      "tests": 25,
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 33
+    },
+    {
+      "file": "tests/xo-cli.test.ts",
+      "tests": 19,
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2114
+    },
+    {
+      "file": "tests/xo-flow.test.ts",
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 4715
+    },
+    {
+      "file": "tests/xo-solid-features.test.ts",
+      "tests": 16,
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 10905
+    },
+    {
+      "file": "tests/xo.test.ts",
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "ms": 2052
+    }
+  ]
+}

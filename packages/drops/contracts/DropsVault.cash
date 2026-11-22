@@ -1,0 +1,11 @@
+pragma cashscript ^0.14.0;
+
+// Hermes Drops — reward vault. Holds FLDCH; spendable only as input 1 of a claim whose
+// input 0 is a pool shard (minting NFT of the receipt category), which enforces the payout.
+// Anyone can top it up by sending FLDCH to its address. No admin withdrawal.
+contract DropsVault(bytes32 receiptCategory) {
+    function release() {
+        require(this.activeInputIndex == 1);
+        require(tx.inputs[0].tokenCategory == receiptCategory + 0x02);
+    }
+}

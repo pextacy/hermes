@@ -1,0 +1,45 @@
+{
+  "name": "hermes",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build:contracts": "pnpm --filter @hermes/swap compile && pnpm --filter @hermes/drops compile && pnpm --filter @hermes/solid compile && pnpm forge:build && pnpm --filter @hermes/xo export",
+    "test": "vitest run && pnpm forge:test && pnpm --filter @hermes/solid test",
+    "forge:build": "cd packages/evm-htlc && forge build && node --experimental-strip-types scripts/export-abi.ts",
+    "forge:test": "cd packages/evm-htlc && forge test -vvv",
+    "test:ts": "vitest run",
+    "dev": "pnpm --filter web dev",
+    "check:submission": "tsx scripts/check-submission.ts",
+    "dev:relay": "tsx scripts/dev-relay.ts",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@bitauth/libauth": "3.1.0-next.8",
+    "@hermes/chain": "workspace:*",
+    "@hermes/drops": "workspace:*",
+    "@hermes/id": "workspace:*",
+    "@hermes/pay": "workspace:*",
+    "@hermes/swap": "workspace:*",
+    "@hermes/xo": "workspace:*",
+    "@noble/hashes": "^2.0.0",
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.12",
+    "@vitest/coverage-v8": "3.2.7",
+    "cashscript": "^0.14.0",
+    "cli": "workspace:*",
+    "nostr-tools": "^2.26.1",
+    "solver": "workspace:*",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "verifier": "workspace:*",
+    "viem": "^2.58.2",
+    "vitest": "^3.0.0",
+    "watcher": "workspace:*",
+    "ws": "^8.18.0"
+  }
+}

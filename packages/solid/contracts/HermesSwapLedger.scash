@@ -1,0 +1,48 @@
+pragma solidcash ^0.51.0;
+
+// Hermes swap ledger — a public, append-only record of settled swaps kept by a solver.
+// A swap can only be recorded with the secret that opens its hashlock (so only swaps that
+// actually settled appear), once per hashlock. State lives in CashToken NFTs (SolidCash
+// stateful contract): counters in data NFTs, the per-hashlock amounts in a verified mapping,
+// and every record emits an on-chain `Settled` event NFT.
+
+uint256 constant SECRET_BYTES = 32;
+
+enum Direction { NONE = 0, USDC_TO_PUSD = 1, PUSD_TO_USDC = 2 }
+
+event Settled(bytes32 indexed hashlock, int amount, int direction);
+
+contract HermesSwapLedger(pubkey operator) {
+    int public settledCount;
+    int public settledVolume;
+    mapping(bytes32 => int) public settledAmount;
+
+    constructor() {
+        this.settledCount = 0;
+        this.settledVolume = 0;
+    }
+
+    modifier onlyOperator(sig s) {
+        require(checkSig(s, operator), "operator signature required");
+        _;
+    }
+
+    modifier opens(bytes secret, bytes32 hashlock) {
+        require(secret.length == SECRET_BYTES, "secret must be 32 bytes");
+        require(sha256(secret) == hashlock, "secret does not open the hashlock");
+        _;
+    }
+
+    function record(bytes32 hashlock, bytes secret, int amount, int direction, sig s)
+        onlyOperator(s)
+        opens(secret, hashlock)
+    {
+        require(amount > 0, "amount must be positive");
+        require(direction == 1 || direction == 2, "unknown direction");
+        require(this.settledAmount[hashlock] == 0, "already recorded");
+        this.settledAmount[hashlock] = amount;
+        this.settledCount = this.settledCount + 1;
+        this.settledVolume = this.settledVolume + amount;
+        emit Settled(hashlock, amount, direction);
+    }
+}

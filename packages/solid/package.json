@@ -1,0 +1,32 @@
+{
+  "name": "@hermes/solid",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./lifecycle-core": "./src/lifecycle-core.ts"
+  },
+  "scripts": {
+    "compile": "solidhat compile",
+    "test": "solidhat test",
+    "doctor": "solidhat doctor",
+    "solidhat:compile": "solidhat compile",
+    "solidhat:typegen": "solidhat typegen",
+    "solidhat:test": "solidhat test",
+    "solidhat:deploy": "solidhat deploy",
+    "solidhat:clean": "solidhat clean",
+    "lifecycle": "tsx src/lifecycle.ts"
+  },
+  "dependencies": {
+    "@solidcash/solidcash": "0.51.1",
+    "@solidcash/solidc": "0.51.1",
+    "@bitauth/libauth": "3.1.0-next.8"
+  },
+  "devDependencies": {
+    "@solidcash/solidhat": "0.51.1",
+    "vitest": "^3.0.0",
+    "typescript": "^5.9.2",
+    "tsx": "^4.19.2"
+  }
+}

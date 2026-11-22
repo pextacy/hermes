@@ -1,0 +1,23 @@
+{
+  "network": "testnet4",
+  "createdAt": "2026-11-22T09:26:35.451Z",
+  "config": {
+    "receiptCategory": "da21475a8ff114a4ac8dd54852b7379d6fb34731660f386d2bb5e56282e215f3",
+    "pendingCategory": "cef5694a75281534f992d5343a7cd1ce5e48ba12fc0648a65bd67bdc31451041",
+    "rewardCategory": "4b484bb233414fcdbbaacd89cc078e1e5e81ddaca81952824c3ae29714412d9f",
+    "authorityPkh": "909f71a408d9e32311a99e0aaca52285753ac1de",
+    "rootTimelock": 3
+  },
+  "shards": 8,
+  "addresses": {
+    "shard": "bchtest:rwtvtseyuretcf45lfcf3gs68n77fcclhwdmfhk4qqpzu2c2c27njh3s22pzu",
+    "vault": "bchtest:rwrf3r53793hcn60hzmmpf4cvdvagyrq95pdcxc7qp7yxnfme3cl605974zan",
+    "pending": "bchtest:rdl0vm2fttu7whw7k980uz5a4jeu8qf38h5skmqmzc5kpjhaprwtzl54rqrsc",
+    "authority": "bchtest:zzgf7udyprv7xgc34x0q4t99y2zh2wkpmcupphjwc2"
+  },
+  "txids": {
+    "authorityGenesis": "dfd2d3202e58441ef233f477639857b8af377f6bb725ffebacb8522423da8004",
+    "shardGenesis": "45e0e9c9e929004bbd13e9a8369d4a791da81483b4858bcc7a615ecbe9a21d9e",
+    "rewardGenesis": "a119f457f35bf5c4327084a54e44db9f47edba085e18446500b201e5491f48e2"
+  }
+}

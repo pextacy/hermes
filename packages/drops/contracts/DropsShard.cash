@@ -1,0 +1,153 @@
+pragma cashscript ^0.14.0;
+
+// Hermes Drops — pool shard (FoldingCash Reward Claims bounty, docs/PLAN.md §5).
+//
+// A shard UTXO holds a *minting* NFT of the receipt category. Its commitment is the shard
+// state:  shardIndex (1) | epoch (4 LE) | activeRoot (32) | firstClaimBitmap (88)  = 125 bytes
+// (BCH 2026 allows 128-byte commitments). Accounts are assigned stable ids when they first
+// appear in a tree; account `a` lives in shard a / 704 at bit a % 704 of the bitmap.
+//
+// claim: proves (lockingBytecode, cumulative, accountId) against the active root, reads the
+//        claimer's receipt (claimedTotal), pays cumulative − claimedTotal from a vault, burns
+//        the old receipt and mints the new one. The first claim of an account sets its bitmap
+//        bit instead of needing a receipt, so a second "first claim" is impossible.
+// promote: replaces the active root with a pending root whose own covenant enforced the
+//        root timelock (DropsPending: tx.age ≥ ROOT_TIMELOCK).
+//
+// Transaction layout (claim):
+//   inputs : 0 shard · 1 vault (reward FT) · 2 claimer funding · 3 receipt (unless first) · …funding
+//   outputs: 0 shard′ · 1 vault′ · 2 receipt′ → claimer · 3 payout → claimer · [4 BCH change, no tokens]
+contract DropsShard(
+    bytes32 receiptCategory,   // VM byte order
+    bytes32 pendingCategory,   // VM byte order — the root authority's category
+    bytes32 rewardCategory,    // VM byte order — FLDCH
+    bytes vaultBytecode,       // locking bytecode of DropsVault
+    bytes pendingBytecode      // locking bytecode of DropsPending
+) {
+    function claim(bytes leafLockingBytecode, int cumulative, int accountId, bytes proof, int path, int receiptIndex) {
+        require(this.activeInputIndex == 0);
+        require(tx.inputs[0].tokenCategory == receiptCategory + 0x02);
+
+        bytes state = tx.inputs[0].nftCommitment;
+        require(state.length == 125);
+        bytes1 shardByte = unsafe_bytes1(state.split(1)[0]);
+        bytes header = state.split(37)[0];
+        bytes32 root = unsafe_bytes32(state.split(5)[1].split(32)[0]);
+        bytes bitmap = state.split(37)[1];
+        int shard = int(shardByte);
+
+        // Account → shard and bit.
+        require(accountId >= 0);
+        require(accountId / 704 == shard);
+        int local = accountId % 704;
+
+        // Leaf = SHA256(lockingBytecode || cumulative (8 LE) || accountId (4 LE)).
+        require(cumulative > 0);
+        bytes32 h = sha256(leafLockingBytecode + toPaddedBytes(cumulative, 8) + toPaddedBytes(accountId, 4));
+
+        // Merkle proof: 32-byte siblings, bit i of `path` = 1 when the node is a right child.
+        require(proof.length % 32 == 0);
+        int depth = proof.length / 32;
+        require(depth <= 20);
+        int i = 0;
+        int p = path;
+        do {
+            if (i < depth) {
+                bytes32 sibling = unsafe_bytes32(proof.split(i * 32)[1].split(32)[0]);
+                if (p % 2 == 1) {
+                    h = sha256(sibling + h);
+                } else {
+                    h = sha256(h + sibling);
+                }
+                p = p / 2;
+            }
+            i = i + 1;
+        } while (i < depth);
+        require(h == root);
+
+        // First claim? Read the account's bit.
+        int byteIndex = local / 8;
+        bytes1 current = unsafe_bytes1(bitmap.split(byteIndex)[1].split(1)[0]);
+        bytes1 mask = unsafe_bytes1(0x0102040810204080.split(local % 8)[1].split(1)[0]);
+        bytes1 masked = current & mask;
+        int claimed = 0;
+        bytes newBitmap = bitmap;
+        if (masked == 0x00) {
+            // First claim: set the bit, no receipt needed.
+            newBitmap = bitmap.split(byteIndex)[0] + (current | mask) + bitmap.split(byteIndex + 1)[1];
+        } else {
+            // Later claim: the account's receipt (immutable NFT of the receipt category) is burned here.
+            require(receiptIndex >= 2);
+            require(tx.inputs[receiptIndex].tokenCategory == receiptCategory);
+            bytes receipt = tx.inputs[receiptIndex].nftCommitment;
+            require(receipt.length == 12);
+            require(receipt.split(4)[0] == toPaddedBytes(accountId, 4));
+            claimed = int(receipt.split(4)[1]);
+        }
+        int payout = cumulative - claimed;
+        require(payout > 0);
+
+        // 0: shard continues with the updated bitmap.
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[0].tokenCategory == receiptCategory + 0x02);
+        require(tx.outputs[0].nftCommitment == header + newBitmap);
+        require(tx.outputs[0].tokenAmount == 0);
+        require(tx.outputs[0].value == tx.inputs[0].value);
+
+        // 1: vault continues, minus the payout.
+        require(tx.inputs[1].lockingBytecode == vaultBytecode);
+        require(tx.inputs[1].tokenCategory == rewardCategory);
+        require(tx.outputs[1].lockingBytecode == vaultBytecode);
+        require(tx.outputs[1].tokenCategory == rewardCategory);
+        require(tx.outputs[1].tokenAmount == tx.inputs[1].tokenAmount - payout);
+        require(tx.outputs[1].value == tx.inputs[1].value);
+
+        // 2: new receipt to the claimer: accountId (4 LE) || claimedTotal (8 LE).
+        require(tx.outputs[2].lockingBytecode == leafLockingBytecode);
+        require(tx.outputs[2].tokenCategory == receiptCategory);
+        require(tx.outputs[2].nftCommitment == toPaddedBytes(accountId, 4) + toPaddedBytes(cumulative, 8));
+        require(tx.outputs[2].tokenAmount == 0);
+
+        // 3: payout to the claimer.
+        require(tx.outputs[3].lockingBytecode == leafLockingBytecode);
+        require(tx.outputs[3].tokenCategory == rewardCategory);
+        require(tx.outputs[3].tokenAmount == payout);
+
+        // Nothing else may carry tokens (no stray receipts, no burned treasury).
+        require(tx.outputs.length <= 5);
+        if (tx.outputs.length == 5) {
+            require(tx.outputs[4].tokenCategory == 0x);
+        }
+    }
+
+    function promote() {
+        require(this.activeInputIndex == 0);
+        require(tx.inputs[0].tokenCategory == receiptCategory + 0x02);
+        bytes state = tx.inputs[0].nftCommitment;
+        require(state.length == 125);
+        bytes1 shardByte = unsafe_bytes1(state.split(1)[0]);
+        int epoch = int(state.split(1)[1].split(4)[0]);
+        bytes bitmap = state.split(37)[1];
+
+        // Pending root for this shard, from the root authority, timelocked by its own covenant.
+        require(tx.inputs[1].lockingBytecode == pendingBytecode);
+        require(tx.inputs[1].tokenCategory == pendingCategory);
+        bytes pending = tx.inputs[1].nftCommitment;
+        require(pending.length == 37);
+        require(pending.split(1)[0] == shardByte);
+        int newEpoch = int(pending.split(1)[1].split(4)[0]);
+        require(newEpoch > epoch);
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[0].tokenCategory == receiptCategory + 0x02);
+        require(tx.outputs[0].nftCommitment == pending + bitmap);
+        require(tx.outputs[0].tokenAmount == 0);
+        require(tx.outputs[0].value == tx.inputs[0].value);
+
+        // The pending NFT is burned; at most one plain change output.
+        require(tx.outputs.length <= 2);
+        if (tx.outputs.length == 2) {
+            require(tx.outputs[1].tokenCategory == 0x);
+        }
+    }
+}

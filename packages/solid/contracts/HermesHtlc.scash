@@ -1,0 +1,71 @@
+pragma solidcash ^0.51.0;
+
+// Hermes HTLC in SolidCash — the BCH leg of a USDC ⇄ PUSD atomic swap, written in the
+// Solidity dialect and compiled to BCH Script. Same semantics as the EVM HermesHTLC.sol
+// (packages/evm-htlc), the XO template and the CashScript contract:
+//   claim  — recipient reveals the 32-byte secret (SHA-256 hashlock) before the timeout;
+//   refund — the locker takes the funds back after the timeout.
+// In both paths the paid-out output at the same index must be P2PKH to the beneficiary,
+// keep the token category and amount (PUSD) and lose at most MAX_FEE satoshis.
+
+/// Spend paths, for documentation and events.
+enum Path { CLAIM = 1, REFUND = 2 }
+
+/// Hard bounds shared with the EVM contract.
+uint256 constant SECRET_LENGTH = 32;
+int constant MAX_FEE = 3000;
+int constant LOCKTIME_TIMESTAMP_THRESHOLD = 500000000;
+
+/// Lock terms, as a value type for clarity in the internal helpers.
+struct Terms {
+    bytes20 recipientPkh;
+    bytes20 refundPkh;
+    bytes32 hashlock;
+    int timeout;
+}
+
+error WrongSecretLength();
+error WrongSecret();
+
+library Hashlock {
+    /// SHA-256 hashlock with an explicit length check (the EVM side checks the same).
+    function opens(bytes memory secret, bytes32 lock) internal pure returns (bool) {
+        return secret.length == SECRET_LENGTH && sha256(secret) == lock;
+    }
+}
+
+library Payout {
+    /// The output at `index` pays `pkh` and preserves value (minus fee) and tokens of the input at `index`.
+    function preserves(int index, bytes20 pkh) internal pure returns (bool) {
+        return tx.outputs[index].lockingBytecode == new LockingBytecodeP2PKH(pkh)
+            && tx.outputs[index].tokenCategory == tx.inputs[index].tokenCategory
+            && tx.outputs[index].tokenAmount == tx.inputs[index].tokenAmount
+            && tx.outputs[index].value + MAX_FEE >= tx.inputs[index].value;
+    }
+}
+
+contract HermesHtlc(bytes20 recipientPkh, bytes20 refundPkh, bytes32 hashlock, int timeout) {
+    using Hashlock for bytes;
+
+    function terms() internal view returns (Terms memory) {
+        return Terms({ recipientPkh: recipientPkh, refundPkh: refundPkh, hashlock: hashlock, timeout: timeout });
+    }
+
+    function claim(pubkey recipientPk, sig recipientSig, bytes secret) {
+        Terms memory t = terms();
+        if (secret.length != SECRET_LENGTH) revert WrongSecretLength();
+        require(secret.opens(t.hashlock), "wrong secret");
+        require(hash160(recipientPk) == t.recipientPkh, "not the recipient");
+        require(checkSig(recipientSig, recipientPk), "bad signature");
+        require(Payout.preserves(this.activeInputIndex, t.recipientPkh), "payout must go to the recipient");
+    }
+
+    function refund(pubkey refundPk, sig refundSig) {
+        Terms memory t = terms();
+        require(t.timeout >= LOCKTIME_TIMESTAMP_THRESHOLD, "timeout must be a timestamp");
+        require(tx.time >= t.timeout, "timeout not reached");
+        require(hash160(refundPk) == t.refundPkh, "not the refunder");
+        require(checkSig(refundSig, refundPk), "bad signature");
+        require(Payout.preserves(this.activeInputIndex, t.refundPkh), "refund must go to the locker");
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@hermes/pay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@hermes/id": "workspace:*",
+    "@hermes/chain": "workspace:*",
+    "nostr-tools": "^2.26.1",
+    "cashscript": "^0.14.0"
+  }
+}

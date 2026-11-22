@@ -1,0 +1,17 @@
+# Static deploy of the Hermes web app (F34).
+# Netlify UI: Base directory = apps/web (this file's folder). Paths below are relative to it.
+# The build is fully static (hash routing, relative asset paths), so it also works from any sub-path or IPFS.
+[build]
+  command = "cd ../.. && pnpm install --frozen-lockfile && pnpm --filter web build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Hash routing (#pay, #swap…) never needs a server route; this only catches stray deep paths.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Response headers (CSP, nosniff, caching) live in public/_headers, copied to dist/_headers by the build.

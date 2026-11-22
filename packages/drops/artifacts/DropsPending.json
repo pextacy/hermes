@@ -1,0 +1,43 @@
+{
+  "contractName": "DropsPending",
+  "constructorInputs": [
+    { "name": "rootTimelock", "type": "int" },
+    { "name": "receiptCategory", "type": "bytes32" },
+    { "name": "authorityPkh", "type": "bytes20" }
+  ],
+  "abi": [
+    { "name": "promote", "inputs": [] },
+    {
+      "name": "cancel",
+      "inputs": [
+        { "name": "authorityPk", "type": "pubkey" },
+        { "name": "authoritySig", "type": "sig" }
+      ]
+    }
+  ],
+  "bytecode": "OP_3 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_CHECKSEQUENCEVERIFY OP_DROP OP_0 OP_UTXOTOKENCATEGORY OP_SWAP OP_2 OP_CAT OP_EQUAL OP_NIP OP_NIP OP_ELSE OP_3 OP_ROLL OP_1 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_HASH160 OP_3 OP_ROLL OP_EQUALVERIFY OP_2SWAP OP_CHECKSIG OP_NIP OP_NIP OP_ENDIF",
+  "source": "pragma cashscript ^0.14.0;\n\n// Hermes Drops — pending root. The root authority mints one NFT per shard (commitment\n// shardIndex (1) | epoch (4 LE) | root (32)) to this address. It can only be promoted into\n// the shard after ROOT_TIMELOCK blocks (relative timelock on this very UTXO, so nobody can\n// shorten it), giving watchers a window to audit the root. The authority may cancel it\n// before promotion (veto a wrong root).\ncontract DropsPending(int rootTimelock, bytes32 receiptCategory, bytes20 authorityPkh) {\n    function promote() {\n        require(this.activeInputIndex == 1);\n        require(this.age >= rootTimelock);\n        require(tx.inputs[0].tokenCategory == receiptCategory + 0x02);\n    }\n\n    function cancel(pubkey authorityPk, sig authoritySig) {\n        require(hash160(authorityPk) == authorityPkh);\n        require(checkSig(authoritySig, authorityPk));\n    }\n}\n",
+  "fingerprint": "8168ea473698d15b97565fd4d331ca256087605188fcb7ecaee20c59b963c458",
+  "debug": {
+    "bytecode": "5379009c63c0519db27500ce7c527e87777767537a519d5379a9537a8872ac777768",
+    "sourceMap": "9:4:13:5;;;;;10:16:10:37;:41::42;:8::44:1;11::11:42;;12:26:12:27:0;:16::42:1;:46::61:0;:64::68;:46:::1;:8::70;9:23:13:5;;:4;15::18::0;;;;16:24:16:35;;:16::36:1;:40::52:0;;:8::54:1;17:25:17:50:0;:8::53:1;15:58:18:5;;8:0:19:1",
+    "logs": [],
+    "requires": [
+      { "ip": 10, "line": 10 },
+      { "ip": 11, "line": 11 },
+      { "ip": 19, "line": 12 },
+      { "ip": 31, "line": 16 },
+      { "ip": 34, "line": 17 }
+    ],
+    "sourceTags": "16:17:sc;31:32:sc"
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.14.0",
+    "options": {
+      "enforceFunctionParameterTypes": true,
+      "enforceLocktimeGuard": true
+    }
+  },
+  "updatedAt": "2026-11-20T18:18:09.666Z"
+}

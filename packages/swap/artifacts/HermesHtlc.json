@@ -1,0 +1,61 @@
+{
+  "contractName": "HermesHtlc",
+  "constructorInputs": [
+    { "name": "recipientPkh", "type": "bytes20" },
+    { "name": "refundPkh", "type": "bytes20" },
+    { "name": "hashlock", "type": "bytes32" },
+    { "name": "timeout", "type": "int" }
+  ],
+  "abi": [
+    {
+      "name": "claim",
+      "inputs": [
+        { "name": "recipientPk", "type": "pubkey" },
+        { "name": "recipientSig", "type": "sig" },
+        { "name": "preimage", "type": "bytes" }
+      ]
+    },
+    {
+      "name": "refund",
+      "inputs": [
+        { "name": "refundPk", "type": "pubkey" },
+        { "name": "refundSig", "type": "sig" }
+      ]
+    }
+  ],
+  "bytecode": "OP_4 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_7 OP_PICK OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_7 OP_ROLL OP_SHA256 OP_3 OP_ROLL OP_EQUALVERIFY OP_4 OP_PICK OP_HASH160 OP_OVER OP_EQUALVERIFY OP_2ROT OP_CHECKSIGVERIFY OP_INPUTINDEX OP_DUP OP_OUTPUTBYTECODE 76a914 OP_3 OP_ROLL OP_CAT 88ac OP_CAT OP_EQUALVERIFY OP_DUP OP_OUTPUTTOKENCATEGORY OP_OVER OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_DUP OP_OUTPUTTOKENAMOUNT OP_OVER OP_UTXOTOKENAMOUNT OP_NUMEQUALVERIFY OP_DUP OP_OUTPUTVALUE OP_SWAP OP_UTXOVALUE b80b OP_SUB OP_GREATERTHANOREQUAL OP_NIP OP_NIP OP_NIP OP_ELSE OP_4 OP_ROLL OP_1 OP_NUMEQUALVERIFY OP_3 OP_ROLL OP_CHECKLOCKTIMEVERIFY OP_DROP OP_3 OP_PICK OP_HASH160 OP_2 OP_PICK OP_EQUALVERIFY OP_4 OP_ROLL OP_4 OP_ROLL OP_CHECKSIGVERIFY OP_INPUTINDEX OP_DUP OP_OUTPUTBYTECODE 76a914 OP_4 OP_ROLL OP_CAT 88ac OP_CAT OP_EQUALVERIFY OP_DUP OP_OUTPUTTOKENCATEGORY OP_OVER OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_DUP OP_OUTPUTTOKENAMOUNT OP_OVER OP_UTXOTOKENAMOUNT OP_NUMEQUALVERIFY OP_DUP OP_OUTPUTVALUE OP_SWAP OP_UTXOVALUE b80b OP_SUB OP_GREATERTHANOREQUAL OP_NIP OP_NIP OP_ENDIF",
+  "source": "pragma cashscript ^0.14.0;\n\n// Hermes HTLC — BCH side of a USDC ⇄ PUSD atomic swap.\n//\n// The same semantics are implemented three times (XO template, SolidCash, CashScript);\n// see docs/PLAN.md §4.3. Hashlock is SHA-256 on both chains; the preimage must be 32 bytes.\n// Works for plain BCH and for CashTokens (PUSD): the paid-out output must carry the same\n// token category and amount as the locked UTXO.\ncontract HermesHtlc(\n    bytes20 recipientPkh,  // who can claim with the preimage\n    bytes20 refundPkh,     // who locked the funds and can refund after the timeout\n    bytes32 hashlock,      // SHA-256(secret)\n    int timeout            // absolute locktime (unix seconds ≥ 500,000,000 or block height)\n) {\n    function claim(pubkey recipientPk, sig recipientSig, bytes preimage) {\n        require(preimage.length == 32);\n        require(sha256(preimage) == hashlock);\n        require(hash160(recipientPk) == recipientPkh);\n        require(checkSig(recipientSig, recipientPk));\n\n        int i = this.activeInputIndex;\n        require(tx.outputs[i].lockingBytecode == new LockingBytecodeP2PKH(recipientPkh));\n        require(tx.outputs[i].tokenCategory == tx.inputs[i].tokenCategory);\n        require(tx.outputs[i].tokenAmount == tx.inputs[i].tokenAmount);\n        require(tx.outputs[i].value >= tx.inputs[i].value - 3000);\n    }\n\n    function refund(pubkey refundPk, sig refundSig) {\n        require(tx.time >= timeout);\n        require(hash160(refundPk) == refundPkh);\n        require(checkSig(refundSig, refundPk));\n\n        int i = this.activeInputIndex;\n        require(tx.outputs[i].lockingBytecode == new LockingBytecodeP2PKH(refundPkh));\n        require(tx.outputs[i].tokenCategory == tx.inputs[i].tokenCategory);\n        require(tx.outputs[i].tokenAmount == tx.inputs[i].tokenAmount);\n        require(tx.outputs[i].value >= tx.inputs[i].value - 3000);\n    }\n}\n",
+  "fingerprint": "397647dc7b5370f299f2f7cc9a2240eb5a537d63655e698a7b5f66e2596bce6b",
+  "debug": {
+    "bytecode": "5479009c635779827701209d577aa8537a885479a9788871adc076cd0376a914537a7e0288ac7e8876d178ce8876d378d09d76cc7cc602b80b94a277777767547a519d537ab1755379a9527988547a547aadc076cd0376a914547a7e0288ac7e8876d178ce8876d378d09d76cc7cc602b80b94a2777768",
+    "sourceMap": "15:4:26:5;;;;;16:16:16:24;;:::31:1;;:35::37:0;:8::39:1;17:23:17:31:0;;:16::32:1;:36::44:0;;:8::46:1;18:24:18:35:0;;:16::36:1;:40::52:0;:8::54:1;19:25:19:50:0;:8::53:1;21:16:21:37:0;22:27:22:28;:16::45:1;:49::87:0;:74::86;;:49::87:1;;;:8::89;23:27:23:28:0;:16::43:1;:57::58:0;:47::73:1;:8::75;24:27:24:28:0;:16::41:1;:55::56:0;:45::69:1;:8::71;25:27:25:28:0;:16::35:1;:49::50:0;:39::57:1;:60::64:0;:39:::1;:8::66;15:73:26:5;;;:4;28::38::0;;;;29:27:29:34;;:8::36:1;;30:24:30:32:0;;:16::33:1;:37::46:0;;:8::48:1;31:25:31:34:0;;:36::44;;:8::47:1;33:16:33:37:0;34:27:34:28;:16::45:1;:49::84:0;:74::83;;:49::84:1;;;:8::86;35:27:35:28:0;:16::43:1;:57::58:0;:47::73:1;:8::75;36:27:36:28:0;:16::41:1;:55::56:0;:45::69:1;:8::71;37:27:37:28:0;:16::35:1;:49::50:0;:39::57:1;:60::64:0;:39:::1;:8::66;28:52:38:5;;9:0:39:1",
+    "logs": [],
+    "requires": [
+      { "ip": 14, "line": 16 },
+      { "ip": 20, "line": 17 },
+      { "ip": 25, "line": 18 },
+      { "ip": 27, "line": 19 },
+      { "ip": 37, "line": 22 },
+      { "ip": 42, "line": 23 },
+      { "ip": 47, "line": 24 },
+      { "ip": 55, "line": 25 },
+      { "ip": 65, "line": 29 },
+      { "ip": 72, "line": 30 },
+      { "ip": 77, "line": 31 },
+      { "ip": 87, "line": 34 },
+      { "ip": 92, "line": 35 },
+      { "ip": 97, "line": 36 },
+      { "ip": 105, "line": 37 }
+    ],
+    "sourceTags": "51:53:sc;101:102:sc"
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.14.0",
+    "options": {
+      "enforceFunctionParameterTypes": true,
+      "enforceLocktimeGuard": true
+    }
+  },
+  "updatedAt": "2026-11-20T18:05:00.430Z"
+}

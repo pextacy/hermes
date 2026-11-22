@@ -1,0 +1,11 @@
+{
+  "name": "@hermes/evm-htlc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./abi.ts" },
+  "scripts": {
+    "build": "forge build && node --experimental-strip-types scripts/export-abi.ts",
+    "test": "forge test -vvv"
+  }
+}

@@ -1,0 +1,566 @@
+{
+  "$schema": "https://libauth.org/schemas/wallet-template-v0.schema.json",
+  "name": "Hermes Drops claim",
+  "description": "Claim CashToken rewards from a Hermes Drops pool with a Merkle proof; a receipt NFT records the claimed total.",
+  "icon": "drop",
+  "version": "1",
+  "supported": [
+    "BCH_2026_05"
+  ],
+  "defaults": {
+    "change": {
+      "output": "changeOutput",
+      "role": "claimer",
+      "generate": [
+        "claimerKey"
+      ]
+    }
+  },
+  "roles": {
+    "claimer": {
+      "name": "Claimer",
+      "description": "An address in the reward tree claiming what it has earned.",
+      "icon": "claimer"
+    }
+  },
+  "start": [
+    {
+      "action": "claim",
+      "role": "claimer",
+      "generate": [
+        "claimerKey"
+      ]
+    },
+    {
+      "action": "claimAgain",
+      "role": "claimer",
+      "generate": [
+        "claimerKey"
+      ]
+    }
+  ],
+  "actions": {
+    "claim": {
+      "name": "First claim",
+      "description": "Claim $(<payout>) reward units for account $(<accountId>) (first claim: sets the account bit, mints the receipt).",
+      "icon": "drop",
+      "roles": {
+        "claimer": {
+          "generate": [
+            "claimerKey"
+          ],
+          "requirements": {
+            "secrets": [
+              "claimerKey"
+            ],
+            "variables": [
+              "receiptCategoryVm",
+              "pendingCategoryVm",
+              "rewardCategoryVm",
+              "vaultBytecode",
+              "pendingBytecode",
+              "receiptCategory",
+              "rewardCategory",
+              "leafLockingBytecode",
+              "cumulative",
+              "accountId",
+              "proof",
+              "path",
+              "shardSatoshis",
+              "shardState",
+              "newShardState",
+              "vaultSatoshis",
+              "vaultTokens",
+              "vaultRemaining",
+              "payout",
+              "receiptCommitment"
+            ]
+          }
+        }
+      },
+      "requirements": {
+        "participants": [
+          {
+            "role": "claimer",
+            "slots": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        ]
+      },
+      "transaction": "claimTransaction"
+    },
+    "claimAgain": {
+      "name": "Claim again",
+      "description": "Claim the difference since the last claim; the old receipt is burned and a new one minted.",
+      "icon": "drop",
+      "roles": {
+        "claimer": {
+          "generate": [
+            "claimerKey"
+          ],
+          "requirements": {
+            "secrets": [
+              "claimerKey"
+            ],
+            "variables": [
+              "receiptCategoryVm",
+              "pendingCategoryVm",
+              "rewardCategoryVm",
+              "vaultBytecode",
+              "pendingBytecode",
+              "receiptCategory",
+              "rewardCategory",
+              "leafLockingBytecode",
+              "cumulative",
+              "accountId",
+              "proof",
+              "path",
+              "shardSatoshis",
+              "shardState",
+              "newShardState",
+              "vaultSatoshis",
+              "vaultTokens",
+              "vaultRemaining",
+              "payout",
+              "receiptCommitment",
+              "previousReceiptCommitment"
+            ]
+          }
+        }
+      },
+      "requirements": {
+        "participants": [
+          {
+            "role": "claimer",
+            "slots": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        ]
+      },
+      "transaction": "claimAgainTransaction"
+    }
+  },
+  "transactions": {
+    "claimTransaction": {
+      "name": "Rewards claimed",
+      "description": "Claimed $(<payout>) reward units.",
+      "icon": "drop",
+      "inputs": [
+        {
+          "input": "shardInput",
+          "inputIndex": 0
+        },
+        {
+          "input": "vaultInput",
+          "inputIndex": 1
+        }
+      ],
+      "outputs": [
+        {
+          "output": "shardOutput",
+          "outputIndex": 0
+        },
+        {
+          "output": "vaultOutput",
+          "outputIndex": 1
+        },
+        {
+          "output": "receiptOutput",
+          "outputIndex": 2
+        },
+        {
+          "output": "payoutOutput",
+          "outputIndex": 3
+        }
+      ],
+      "version": 2,
+      "locktime": 0
+    },
+    "claimAgainTransaction": {
+      "name": "Rewards claimed",
+      "description": "Claimed $(<payout>) more reward units.",
+      "icon": "drop",
+      "inputs": [
+        {
+          "input": "shardAgainInput",
+          "inputIndex": 0
+        },
+        {
+          "input": "vaultInput",
+          "inputIndex": 1
+        },
+        {
+          "input": "receiptInput",
+          "inputIndex": 2
+        }
+      ],
+      "outputs": [
+        {
+          "output": "shardOutput",
+          "outputIndex": 0
+        },
+        {
+          "output": "vaultOutput",
+          "outputIndex": 1
+        },
+        {
+          "output": "receiptOutput",
+          "outputIndex": 2
+        },
+        {
+          "output": "payoutOutput",
+          "outputIndex": 3
+        }
+      ],
+      "version": 2,
+      "locktime": 0
+    }
+  },
+  "inputs": {
+    "shardInput": {
+      "name": "Pool shard",
+      "description": "The shard holding this account’s claim bit and the active root.",
+      "icon": "pool",
+      "valueSatoshis": "$(<shardSatoshis>)",
+      "token": {
+        "category": "$(<receiptCategory>)",
+        "amount": null,
+        "nft": {
+          "capability": "minting",
+          "commitment": "$(<shardState>)"
+        }
+      },
+      "unlockingScript": "shardFirstClaimUnlock"
+    },
+    "shardAgainInput": {
+      "name": "Pool shard",
+      "description": "The shard holding the active root.",
+      "icon": "pool",
+      "valueSatoshis": "$(<shardSatoshis>)",
+      "token": {
+        "category": "$(<receiptCategory>)",
+        "amount": null,
+        "nft": {
+          "capability": "minting",
+          "commitment": "$(<shardState>)"
+        }
+      },
+      "unlockingScript": "shardClaimAgainUnlock"
+    },
+    "vaultInput": {
+      "name": "Reward vault",
+      "description": "The vault paying the reward.",
+      "icon": "pool",
+      "valueSatoshis": "$(<vaultSatoshis>)",
+      "token": {
+        "category": "$(<rewardCategory>)",
+        "amount": "$(<vaultTokens>)",
+        "nft": null
+      },
+      "unlockingScript": "vaultUnlock"
+    },
+    "receiptInput": {
+      "name": "Previous receipt",
+      "description": "The receipt NFT from the last claim (burned).",
+      "icon": "receipt",
+      "valueSatoshis": "1000",
+      "token": {
+        "category": "$(<receiptCategory>)",
+        "amount": null,
+        "nft": {
+          "capability": "none",
+          "commitment": "$(<previousReceiptCommitment>)"
+        }
+      },
+      "unlockingScript": "claimerUnlock"
+    }
+  },
+  "outputs": {
+    "changeOutput": {
+      "name": "Change",
+      "description": "Change.",
+      "icon": "receive",
+      "lockingScript": "claimerWallet"
+    },
+    "shardOutput": {
+      "name": "Pool shard",
+      "description": "Shard continues with the updated claim bitmap.",
+      "icon": "pool",
+      "lockingScript": "shardScript",
+      "valueSatoshis": "$(<shardSatoshis>)",
+      "token": {
+        "category": "$(<receiptCategory>)",
+        "amount": null,
+        "nft": {
+          "capability": "minting",
+          "commitment": "$(<newShardState>)"
+        }
+      },
+      "roles": {
+        "claimer": {
+          "relevant": false
+        }
+      }
+    },
+    "vaultOutput": {
+      "name": "Reward vault",
+      "description": "Vault continues minus the payout.",
+      "icon": "pool",
+      "lockingScript": "vaultScript",
+      "valueSatoshis": "$(<vaultSatoshis>)",
+      "token": {
+        "category": "$(<rewardCategory>)",
+        "amount": "$(<vaultRemaining>)",
+        "nft": null
+      },
+      "roles": {
+        "claimer": {
+          "relevant": false
+        }
+      }
+    },
+    "receiptOutput": {
+      "name": "Receipt",
+      "description": "Receipt NFT: account and claimed total.",
+      "icon": "receipt",
+      "lockingScript": "claimerWallet",
+      "valueSatoshis": "1000",
+      "token": {
+        "category": "$(<receiptCategory>)",
+        "amount": null,
+        "nft": {
+          "capability": "none",
+          "commitment": "$(<receiptCommitment>)"
+        }
+      }
+    },
+    "payoutOutput": {
+      "name": "Reward",
+      "description": "$(<payout>) reward units.",
+      "icon": "drop",
+      "lockingScript": "claimerWallet",
+      "valueSatoshis": "1000",
+      "token": {
+        "category": "$(<rewardCategory>)",
+        "amount": "$(<payout>)",
+        "nft": null
+      }
+    }
+  },
+  "lockingScripts": {
+    "shardScript": {
+      "name": "Drops shard covenant",
+      "description": "Verifies Merkle proofs and receipts (DropsShard.cash).",
+      "icon": "pool",
+      "lockingType": "p2sh",
+      "lockingBytecode": "shardRedeem",
+      "actions": [],
+      "selectable": false,
+      "balance": {
+        "satoshis": "0n",
+        "fungibleTokens": "0n",
+        "nonfungibleTokens": 0
+      }
+    },
+    "vaultScript": {
+      "name": "Drops vault covenant",
+      "description": "Releases rewards only to a shard claim (DropsVault.cash).",
+      "icon": "pool",
+      "lockingType": "p2sh",
+      "lockingBytecode": "vaultRedeem",
+      "actions": [],
+      "selectable": false,
+      "balance": {
+        "satoshis": "0n",
+        "fungibleTokens": "0n",
+        "nonfungibleTokens": 0
+      }
+    },
+    "claimerWallet": {
+      "name": "Claimer wallet",
+      "description": "P2PKH of the claimer key — the leaf’s locking bytecode.",
+      "icon": "address",
+      "lockingType": "p2pkh",
+      "lockingBytecode": "claimerP2pkh",
+      "unlockingBytecode": "claimerUnlock",
+      "actions": [],
+      "roles": {
+        "claimer": {
+          "state": {
+            "secrets": [
+              "claimerKey"
+            ]
+          },
+          "actions": [
+            {
+              "action": "claimAgain",
+              "role": "claimer",
+              "secrets": [
+                {
+                  "claimerKey": null
+                }
+              ]
+            }
+          ],
+          "balance": {
+            "satoshis": true,
+            "fungibleTokens": true,
+            "nonfungibleTokens": true
+          },
+          "selectable": true
+        }
+      }
+    }
+  },
+  "scripts": {
+    "shardRedeem": "<pendingBytecode> <vaultBytecode> <rewardCategoryVm> <pendingCategoryVm> <receiptCategoryVm> OP_5 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_2 OP_CAT OP_EQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_SIZE <0x7d> OP_NUMEQUALVERIFY OP_DUP OP_1 OP_SPLIT OP_DROP OP_OVER <0x25> OP_SPLIT OP_DROP OP_2 OP_PICK OP_5 OP_SPLIT OP_NIP <0x20> OP_SPLIT OP_DROP OP_3 OP_ROLL <0x25> OP_SPLIT OP_NIP OP_3 OP_ROLL OP_BIN2NUM OP_12 OP_PICK OP_0 OP_GREATERTHANOREQUAL OP_VERIFY OP_12 OP_PICK <0xc002> OP_DIV OP_NUMEQUALVERIFY OP_11 OP_PICK <0xc002> OP_MOD OP_11 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_10 OP_PICK OP_12 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_13 OP_PICK OP_4 OP_NUM2BIN OP_CAT OP_SHA256 OP_14 OP_PICK OP_SIZE OP_NIP <0x20> OP_MOD OP_0 OP_NUMEQUALVERIFY OP_14 OP_PICK OP_SIZE OP_NIP <0x20> OP_DIV OP_DUP <0x14> OP_LESSTHANOREQUAL OP_VERIFY OP_0 <0x11> OP_ROLL OP_BEGIN OP_OVER OP_3 OP_PICK OP_LESSTHAN OP_IF <0x11> OP_PICK OP_2 OP_PICK <0x20> OP_MUL OP_SPLIT OP_NIP <0x20> OP_SPLIT OP_DROP OP_OVER OP_2 OP_MOD OP_1 OP_NUMEQUAL OP_IF OP_DUP OP_5 OP_PICK OP_CAT OP_SHA256 OP_5 OP_ROLL OP_DROP OP_SWAP OP_TOALTSTACK OP_SWAP OP_2SWAP OP_ROT OP_FROMALTSTACK OP_ELSE OP_4 OP_PICK OP_OVER OP_CAT OP_SHA256 OP_5 OP_ROLL OP_DROP OP_SWAP OP_TOALTSTACK OP_SWAP OP_2SWAP OP_ROT OP_FROMALTSTACK OP_ENDIF OP_OVER OP_2 OP_DIV OP_NIP OP_NIP OP_ENDIF OP_SWAP OP_1ADD OP_TUCK OP_3 OP_PICK OP_GREATERTHANOREQUAL OP_UNTIL OP_3 OP_ROLL OP_6 OP_ROLL OP_EQUALVERIFY OP_3 OP_PICK OP_8 OP_DIV OP_5 OP_PICK OP_OVER OP_SPLIT OP_NIP OP_1 OP_SPLIT OP_DROP <0x0102040810204080> OP_6 OP_ROLL OP_8 OP_MOD OP_SPLIT OP_NIP OP_1 OP_SPLIT OP_DROP OP_2DUP OP_AND OP_0 OP_8 OP_PICK OP_ROT <0x00> OP_EQUAL OP_IF OP_8 OP_PICK OP_5 OP_PICK OP_SPLIT OP_DROP OP_4 OP_PICK OP_4 OP_PICK OP_OR OP_CAT OP_9 OP_PICK OP_6 OP_PICK OP_1ADD OP_SPLIT OP_NIP OP_CAT OP_NIP OP_ELSE <0x14> OP_PICK OP_2 OP_GREATERTHANOREQUAL OP_VERIFY <0x14> OP_PICK OP_UTXOTOKENCATEGORY OP_11 OP_PICK OP_EQUALVERIFY <0x14> OP_PICK OP_UTXOTOKENCOMMITMENT OP_SIZE OP_12 OP_NUMEQUALVERIFY OP_DUP OP_4 OP_SPLIT OP_DROP <0x14> OP_PICK OP_4 OP_NUM2BIN OP_EQUALVERIFY OP_DUP OP_4 OP_SPLIT OP_NIP OP_BIN2NUM OP_2SWAP OP_NIP OP_ROT OP_DROP OP_ENDIF <0x11> OP_PICK OP_ROT OP_SUB OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_11 OP_PICK OP_2 OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_10 OP_ROLL OP_3 OP_ROLL OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENAMOUNT OP_0 OP_NUMEQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_1 OP_UTXOBYTECODE OP_12 OP_PICK OP_EQUALVERIFY OP_1 OP_UTXOTOKENCATEGORY OP_11 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTBYTECODE OP_12 OP_ROLL OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_11 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENAMOUNT OP_1 OP_UTXOTOKENAMOUNT OP_2 OP_PICK OP_SUB OP_NUMEQUALVERIFY OP_1 OP_OUTPUTVALUE OP_1 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_2 OP_OUTPUTBYTECODE OP_14 OP_PICK OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCATEGORY OP_9 OP_ROLL OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENCOMMITMENT OP_15 OP_ROLL OP_4 OP_NUM2BIN OP_15 OP_ROLL OP_8 OP_NUM2BIN OP_CAT OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENAMOUNT OP_0 OP_NUMEQUALVERIFY OP_3 OP_OUTPUTBYTECODE OP_13 OP_ROLL OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENCATEGORY OP_10 OP_ROLL OP_EQUALVERIFY OP_3 OP_OUTPUTTOKENAMOUNT OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_5 OP_LESSTHANOREQUAL OP_VERIFY OP_TXOUTPUTCOUNT OP_5 OP_NUMEQUAL OP_IF OP_4 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_ROLL OP_1 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_OVER OP_2 OP_CAT OP_EQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_SIZE <0x7d> OP_NUMEQUALVERIFY OP_DUP OP_1 OP_SPLIT OP_DROP OP_OVER OP_1 OP_SPLIT OP_NIP OP_4 OP_SPLIT OP_DROP OP_BIN2NUM OP_ROT <0x25> OP_SPLIT OP_NIP OP_1 OP_UTXOBYTECODE OP_8 OP_ROLL OP_EQUALVERIFY OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_ROLL OP_EQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_SIZE <0x25> OP_NUMEQUALVERIFY OP_DUP OP_1 OP_SPLIT OP_DROP OP_4 OP_ROLL OP_EQUALVERIFY OP_DUP OP_1 OP_SPLIT OP_NIP OP_4 OP_SPLIT OP_DROP OP_BIN2NUM OP_3 OP_ROLL OP_GREATERTHAN OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_3 OP_ROLL OP_2 OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_SWAP OP_ROT OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENAMOUNT OP_0 OP_NUMEQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_NUMEQUALVERIFY OP_TXOUTPUTCOUNT OP_2 OP_LESSTHANOREQUAL OP_VERIFY OP_TXOUTPUTCOUNT OP_2 OP_NUMEQUAL OP_IF OP_1 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_2DROP OP_1 OP_ENDIF",
+    "vaultRedeem": "<receiptCategoryVm> OP_INPUTINDEX OP_1 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY OP_SWAP OP_2 OP_CAT OP_EQUAL",
+    "shardFirstClaimUnlock": "<3> <path> <proof> <accountId> <cumulative> <leafLockingBytecode> OP_0",
+    "shardClaimAgainUnlock": "<2> <path> <proof> <accountId> <cumulative> <leafLockingBytecode> OP_0",
+    "vaultUnlock": "",
+    "claimerP2pkh": "OP_DUP OP_HASH160 <$(<claimerKey.public_key> OP_HASH160)> OP_EQUALVERIFY OP_CHECKSIG",
+    "claimerUnlock": "<claimerKey.schnorr_signature.all_outputs> <claimerKey.public_key>"
+  },
+  "variables": {
+    "claimerKey": {
+      "name": "Claimer key",
+      "description": "Key of the address in the reward tree.",
+      "type": "private_key"
+    },
+    "receiptCategoryVm": {
+      "name": "Receipt category (VM order)",
+      "description": "Receipt category bytes as introspected by the VM (reversed txid).",
+      "type": "bytes"
+    },
+    "pendingCategoryVm": {
+      "name": "Authority category (VM order)",
+      "description": "Root authority category bytes (reversed txid).",
+      "type": "bytes"
+    },
+    "rewardCategoryVm": {
+      "name": "Reward category (VM order)",
+      "description": "Reward token category bytes (reversed txid).",
+      "type": "bytes"
+    },
+    "vaultBytecode": {
+      "name": "Vault locking bytecode",
+      "description": "From the pool deployment record.",
+      "type": "bytes"
+    },
+    "pendingBytecode": {
+      "name": "Pending-root locking bytecode",
+      "description": "From the pool deployment record.",
+      "type": "bytes"
+    },
+    "receiptCategory": {
+      "name": "Receipt category",
+      "description": "Receipt NFT category (txid order).",
+      "type": "token_category"
+    },
+    "rewardCategory": {
+      "name": "Reward token",
+      "description": "Reward token category, e.g. FLDCH.",
+      "type": "token_category"
+    },
+    "leafLockingBytecode": {
+      "name": "Leaf address",
+      "description": "Locking bytecode committed in the leaf (the claimer’s address).",
+      "type": "locking_script"
+    },
+    "cumulative": {
+      "name": "Cumulative earned",
+      "description": "Cumulative entitlement in the active tree (base units).",
+      "type": "integer"
+    },
+    "accountId": {
+      "name": "Account id",
+      "description": "Stable account id in the tree.",
+      "type": "integer"
+    },
+    "proof": {
+      "name": "Merkle proof",
+      "description": "Concatenated 32-byte siblings.",
+      "type": "bytes"
+    },
+    "path": {
+      "name": "Proof path",
+      "description": "Bit i = 1 when the node at level i is a right child.",
+      "type": "integer"
+    },
+    "shardSatoshis": {
+      "name": "Shard satoshis",
+      "description": "Value of the shard UTXO (unchanged).",
+      "type": "satoshis"
+    },
+    "shardState": {
+      "name": "Shard state",
+      "description": "Current shard commitment.",
+      "type": "token_commitment"
+    },
+    "newShardState": {
+      "name": "Next shard state",
+      "description": "Shard commitment with this account’s bit set.",
+      "type": "token_commitment"
+    },
+    "vaultSatoshis": {
+      "name": "Vault satoshis",
+      "description": "Value of the vault UTXO (unchanged).",
+      "type": "satoshis"
+    },
+    "vaultTokens": {
+      "name": "Vault tokens",
+      "description": "Reward tokens in the vault UTXO.",
+      "type": "token_amount"
+    },
+    "vaultRemaining": {
+      "name": "Vault remaining",
+      "description": "Vault tokens after the payout.",
+      "type": "token_amount"
+    },
+    "payout": {
+      "name": "Payout",
+      "description": "cumulative − claimedTotal.",
+      "type": "token_amount"
+    },
+    "receiptCommitment": {
+      "name": "New receipt",
+      "description": "accountId (4 LE) || cumulative (8 LE).",
+      "type": "token_commitment"
+    },
+    "previousReceiptCommitment": {
+      "name": "Previous receipt",
+      "description": "accountId (4 LE) || claimedTotal (8 LE).",
+      "type": "token_commitment"
+    }
+  },
+  "icons": [
+    {
+      "name": "drop",
+      "hash": "0000000000000000000000"
+    },
+    {
+      "name": "claimer",
+      "hash": "0000000000000000000000"
+    },
+    {
+      "name": "pool",
+      "hash": "0000000000000000000000"
+    },
+    {
+      "name": "receipt",
+      "hash": "0000000000000000000000"
+    },
+    {
+      "name": "receive",
+      "hash": "0000000000000000000000"
+    },
+    {
+      "name": "address",
+      "hash": "0000000000000000000000"
+    }
+  ]
+}
