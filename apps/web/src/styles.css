@@ -654,8 +654,6 @@ footer { max-width: 920px; }
 }
 @media (prefers-reduced-motion: reduce) { .features li { transition: none; } }
 @media (max-width: 860px) { .hero > .art { order: 10; } }
-:root[data-theme='dark'] .brand img { filter: invert(1) hue-rotate(180deg); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .brand img { filter: invert(1) hue-rotate(180deg); } }
 
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 760px) { .grid3 { grid-template-columns: 1fr; } }

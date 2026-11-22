@@ -39,7 +39,7 @@ export let confirmMainnet: (message: string) => boolean = (m) => (typeof window 
 export const setConfirmMainnet = (f: (message: string) => boolean) => void (confirmMainnet = f);
 
 export function HermesProvider({ children }: { children: ReactNode }) {
-  const wc = useWizardConnect({ dappName: 'Hermes', dappIcon: new URL('hermes.svg', location.href).href });
+  const wc = useWizardConnect({ dappName: 'Hermes', dappIcon: new URL('hermes-logo.png', location.href).href });
   const [nostrMode, setMode] = useState<NostrMode>(loadChoice<NostrMode>('hermes.nostrMode', ['nip07', 'local'], Nip07Signer.available() ? 'nip07' : 'local'));
   const [idNetwork, setNet] = useState<BchNetwork>(loadChoice<BchNetwork>('hermes.idNetwork', NETS, HERMES.web.payNetwork as BchNetwork));
   const [payNetwork, setPayNet] = useState<BchNetwork>(loadChoice<BchNetwork>('hermes.payNetwork', NETS, HERMES.web.payNetwork as BchNetwork));

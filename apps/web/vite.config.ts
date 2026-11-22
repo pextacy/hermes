@@ -22,7 +22,7 @@ function hermesServiceWorker(): Plugin {
       const sw = bundle['sw.js'] as OutputChunk | undefined;
       if (!sw) return this.error('sw.js was not emitted');
       if (/^\s*import\b|\bimport\s*\(|^export\b/m.test(sw.code)) this.error('sw.js must be standalone (no imports/exports)');
-      const files = new Set<string>(['index.html', 'manifest.webmanifest', 'hermes.svg', 'icon-192.png', 'icon-512.png', 'theme-init.js']);
+      const files = new Set<string>(['index.html', 'manifest.webmanifest', 'hermes-logo.png', 'favicon.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'theme-init.js']);
       const walk = (name: string) => {
         const c = bundle[name];
         if (!c || files.has(name)) return;

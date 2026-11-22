@@ -105,7 +105,7 @@ function Shell() {
       <header className="top">
         <div className="top-in">
           <a className="brand" href="#pay">
-            <img src="hermes.svg" alt="" width={22} height={22} />
+            <img src="hermes-logo.png" alt="" width={22} height={22} />
             <span>Hermes</span>
           </a>
           <nav aria-label="Sections">

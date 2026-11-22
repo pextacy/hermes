@@ -191,7 +191,7 @@ describe('G38 service worker routing', () => {
     expect(s(`${O}/sub/index.html`, 'GET', 'navigate')).toBe('network-first');
     expect(s(`${O}/assets/index-abc123.js`)).toBe('cache-first');
     expect(s(`${O}/sub/path/assets/Swap-x.js`)).toBe('cache-first');
-    expect(s(`${O}/hermes.svg`)).toBe('stale-while-revalidate');
+    expect(s(`${O}/hermes-logo.png`)).toBe('stale-while-revalidate');
     expect(s(`${O}/manifest.webmanifest`)).toBe('stale-while-revalidate');
   });
 
