@@ -23,8 +23,8 @@
   },
   "web": {
     "banner": {
-      "presentationUrl": "https://docs.google.com/presentation/d/1Yfuk9CJkf4U9M_WukcELhumWgj3Ak6345Ewy8hSp-Hk/edit?usp=sharing",
-      "presentationIsDraft": true,
+      "presentationUrl": "https://docs.google.com/presentation/d/1Vw1DljTo5zol5KYAH9MFP6e_ZV7vD1DqO6zpPhS1S1M/edit?usp=sharing",
+      "presentationIsDraft": false,
       "repoUrl": "https://github.com/pextacy/hermes",
       "ember2026Address": "bitcoincash:zrrt3y372u6vsgwa7qphw8mga8xh5dx6jvw6fv9t57",
       "preExisting": null
