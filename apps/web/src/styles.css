@@ -65,7 +65,24 @@ footer { text-align: left; color: var(--muted); font-size: 12.5px; padding: 22px
 .hero.small h2 { font-size: 24px; }
 .hero.small p { font-size: 15px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.card > p { margin: 0; }
+.card > p, .fold-body > p { margin: 0; }
+/* Secondary tools: quiet label + closed rows */
+.more { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+.more-label { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 2px; }
+.more-list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); overflow: hidden; }
+.more-list .card.fold { border: 0; border-radius: 0; padding: 0; gap: 0; background: transparent; }
+.more-list > * + * { border-top: 1px solid var(--line) !important; }
+details.card.fold > summary { list-style: none; cursor: pointer; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+details.card.fold > summary::-webkit-details-marker { display: none; }
+details.card.fold > summary h3 { font-weight: 500; font-size: 14.5px; }
+details.card.fold > summary::after { content: ''; margin-left: auto; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; flex: none; }
+details.card.fold[open] > summary::after { transform: rotate(45deg); }
+details.card.fold > summary:hover h3 { color: var(--text); }
+details.card.fold > summary:hover { background: var(--sunken); }
+.fold-body { padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+.fold-aside { display: flex; justify-content: flex-end; gap: 8px; font-size: 13px; color: var(--muted); }
+details.card.fold { padding: 0; gap: 0; }
+@media (prefers-reduced-motion: reduce) { details.card.fold > summary::after { transition: none; } }
 .card > p + p { margin-top: -4px; }
 .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .card-head h3 { font-size: 15px; }
@@ -235,11 +252,12 @@ textarea[aria-invalid='true'] { border-color: var(--err); }
 .sim-step-head { gap: 8px; }
 @media (max-width: 520px) { .sim-bal > div { grid-template-columns: 1fr 1fr; } .sim-bal > div > span:first-child { grid-column: 1 / -1; } }
 /* 2-minute tour */
-.tour { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 12px 16px; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; }
+.tour { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 10px 16px; margin-bottom: 32px; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
 .tour-min { padding: 6px 16px; background: transparent; border-style: dashed; }
 .tour-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .tour-head b, .tour-head strong { font-weight: 600; }
 .tour-head .link { margin-left: auto; }
+.tour-head > b { font-weight: 600; margin-right: 6px; }
 .tour-steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px 18px; flex-wrap: wrap; }
 .tour-steps a { display: inline-flex; align-items: center; gap: 7px; padding: 2px 0; text-decoration: none; color: var(--muted); font-size: 13.5px; border-bottom: 1px solid transparent; }
 .tour-steps a:hover { color: var(--text); }

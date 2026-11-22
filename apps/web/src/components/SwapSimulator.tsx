@@ -122,11 +122,10 @@ export function SwapSimulator() {
   const nowSim = current?.at ?? plan?.t0;
   const solverBadTimeout = plan && plan.scenario === 'short-timeout' ? steps.find((s) => s.checks)?.at : undefined;
   return (
-    <Card title="Try it now — a full atomic swap in your browser" aside={<span className="net net-mock">NO WALLET · NO TESTNET</span>}>
+    <Card title="Try it now: a full atomic swap in your browser" aside={<span className="net net-mock">NO WALLET · NO TESTNET</span>}>
       <p className="muted small">
-        Both chains run the <b>real contracts</b>: the compiled HermesHTLC + USDC bytecode on an in-browser EVM, and the HermesHtlc covenant on
-        the BCH 2026 VM, built with the same code as the live swap. The secret really travels from one chain to the other, and the contracts
-        themselves must reject every attack along the way. Nothing is broadcast.
+        Runs the real contracts on both chains, here in this tab: HermesHTLC on an in-browser EVM and the CashScript HTLC on the BCH 2026 VM.
+        Nothing is broadcast.
       </p>
       <div className="row wrap">
         <div className="seg" role="group" aria-label="Direction">

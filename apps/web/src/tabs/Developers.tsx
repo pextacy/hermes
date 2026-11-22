@@ -4,7 +4,7 @@ import dropsClaimTemplate from '../../../../packages/xo/templates/hermes-drops-c
 import { InvitationViewer } from '../components/InvitationViewer';
 import { SolidLifecycle } from '../components/SolidLifecycle';
 import { useEffect } from 'react';
-import { Card } from '../components/ui';
+import { Card, More } from '../components/ui';
 import { useHashParams } from '../lib/context';
 import { VerifierPlayground } from '../components/dev/VerifierPlayground';
 import { ContractSources } from '../components/dev/ContractSources';
@@ -34,11 +34,15 @@ function download(name: string, data: unknown) {
   setTimeout(() => URL.revokeObjectURL(a.href), 0);
 }
 
-const goTo = (key: string, smooth = true) => document.getElementById(`dev-${key}`)?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+const goTo = (key: string, smooth = true) => {
+  const el = document.getElementById(`dev-${key}`);
+  el?.querySelector('details')?.setAttribute('open', '');
+  el?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+};
 
 export function Developers() {
   // G42: #developers?tool=<key> opens on that tool, and the jump buttons keep the link shareable.
-  const { params, setParams } = useHashParams();
+  const { params } = useHashParams();
   useEffect(() => {
     if (params.tool && TOOLS.some((t) => t.key === params.tool)) setTimeout(() => goTo(params.tool!, false), 50);
   }, []);
@@ -46,30 +50,18 @@ export function Developers() {
     <div className="stack">
       <div className="hero small">
         <h2>Developers</h2>
-        <p>Everything Hermes uses is reusable: XO templates, one HTLC in four languages, SolidCash contracts you can run here, and a verification library.</p>
+        <p>The pieces Hermes is built from, ready to reuse: XO templates, the HTLC in four languages, SolidCash contracts and the verification library.</p>
       </div>
 
-      <nav className="dev-nav" aria-label="Developer tools">
+      <More label="Tools">
         {TOOLS.map((t) => (
-          <button
-            key={t.key}
-            className="small"
-            onClick={() => {
-              setParams({ tool: t.key });
-              goTo(t.key);
-            }}
-          >
-            {t.label}
-          </button>
+          <div key={t.key} id={`dev-${t.key}`} className="dev-anchor">
+            {t.el}
+          </div>
         ))}
-      </nav>
+      </More>
 
-      {TOOLS.map((t) => (
-        <div key={t.key} id={`dev-${t.key}`} className="dev-anchor">
-          {t.el}
-        </div>
-      ))}
-
+      <More label="Reference">
       <Card title="XO templates (Build With XO)">
         <ul>
           <li>
@@ -114,6 +106,7 @@ const { identity } = await d.resolve('npub1…'); // or name@domain, or a cashad
 identity.current.addr;                           // verified destination
 verifyChain(identity.current.event).ok;          // both signatures + rotation chain, offline`}</pre>
       </Card>
+      </More>
 
     </div>
   );

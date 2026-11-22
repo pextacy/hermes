@@ -33,7 +33,7 @@ import { SignatureTemplate, type Utxo } from 'cashscript';
 import { useHermes } from '../lib/context';
 import { ensureLocalNostr, getLocalNsec, localBchSigner, localWallet } from '../lib/keys';
 import { wcSendOutputs } from '../lib/wizard';
-import { Card, NetBadge, Status, TxLink, short, Copy } from '../components/ui';
+import { Card, NetBadge, Status, TxLink, short, Copy, More } from '../components/ui';
 import { Qr } from '../components/Qr';
 import { load, save } from '../lib/storage';
 import { AddressGuardBox, BatchPay, ContactBadge, ContactsCard, QrScan, ReceiptButton, RequestWatcher, TxPreviewView, estimatePreview, isRawAddress, receiptLine } from '../components/PayExtras';
@@ -423,8 +423,8 @@ export function Pay() {
       <div className="hero">
         <h1>Pay a person, not an address.</h1>
         <p>
-          Paste a Nostr identity. Hermes finds the Bitcoin Cash address they bound to it — checked with signatures from <em>both</em>{' '}
-          keys, no server in between — and you pay it on <NetBadge network={payNetwork} />.
+          Paste an npub or a name. Hermes finds the Bitcoin Cash address they signed for and checks both signatures before you pay.{' '}
+          <NetBadge network={payNetwork} />
         </p>
       </div>
 
@@ -466,9 +466,8 @@ export function Pay() {
           <div className="row wrap small">
             <span className="muted">No npub at hand?</span>
             <button className="link" onClick={() => void createDemoIdentity()} disabled={!!creating || resolving}>
-              Create my Hermes ID in one click and look it up
+              Create my Hermes ID in one click
             </button>
-            <span className="muted">(binds this browser&apos;s own keys — back them up in Identity)</span>
           </div>
         )}
         {creating && <Status kind="info">{creating}</Status>}
@@ -621,19 +620,20 @@ export function Pay() {
         <div className="explainer">
           <div>
             <b>1 · Link</b>
-            <p>In Identity, your BCH key and your Nostr key sign the same statement. The binding is published to Nostr relays.</p>
+            <p>Your BCH key and Nostr key sign one statement, published to relays.</p>
           </div>
           <div>
             <b>2 · Find</b>
-            <p>Anyone can fetch it from several relays and verify both signatures and the rotation chain locally.</p>
+            <p>Anyone fetches it from several relays and checks both signatures.</p>
           </div>
           <div>
             <b>3 · Pay</b>
-            <p>Send BCH, PUSD or any CashToken to the verified address — no copy-pasted addresses, no address poisoning.</p>
+            <p>Funds go to the verified address. Nothing to copy, nothing to poison.</p>
           </div>
         </div>
       )}
 
+      <More>
       <RequestCard myNpub={myNpub} pusd={pusd} />
       <BatchPay />
       <ContactsCard
@@ -647,6 +647,7 @@ export function Pay() {
 
       <Card
         title="Your payments (this browser)"
+        open={history.length > 0}
         aside={
           history.length > 0 && (
             <button
@@ -663,7 +664,7 @@ export function Pay() {
         }
       >
         {history.length === 0 ? (
-          <p className="muted small">No payments yet. Payments you send from this browser are listed here with a link to the block explorer; nothing leaves your device.</p>
+          <p className="muted small">No payments yet. Payments sent from this browser appear here; the list never leaves your device.</p>
         ) : (
           <div className="table-scroll">
             <table className="table">
@@ -703,6 +704,7 @@ export function Pay() {
           </div>
         )}
       </Card>
+      </More>
     </div>
   );
 }

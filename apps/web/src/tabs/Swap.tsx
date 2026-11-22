@@ -383,8 +383,8 @@ export function Swap() {
       <div className="hero small">
         <h2>Hermes Swap</h2>
         <p>
-          USDC on {evm.name} ⇄ PUSD on Bitcoin Cash with hash time-locked contracts on both chains — the same SHA-256 secret unlocks both
-          sides. No bridge, no custodian, no wrapped IOU. Refunds are automatic after the timeout.
+          USDC on {evm.name} for PUSD on Bitcoin Cash. One secret unlocks a time-locked contract on each chain: both sides settle, or both
+          refund. No bridge, no custodian.
         </p>
         <p className="row wrap small">
           <NetBadge network={demoNetwork} /> <span className="net net-evm">{evm.name.toUpperCase()}</span>
@@ -396,8 +396,8 @@ export function Swap() {
 
       {!ready && (
         <Status kind="info">
-          Live testnet swaps: the contracts are not configured on this deployment yet ({[!evm.htlc && 'EVM HTLC address', !evm.usdc && 'USDC address', !pusdCfg.category && 'tPUSD category'].filter(Boolean).join(', ')} in
-          config/networks.json). The form below is the same flow against a running solver; until then, the simulator above runs it end to end.
+          Live swaps on this deployment need {[!evm.htlc && 'the EVM HTLC address', !evm.usdc && 'the USDC address', !pusdCfg.category && `a tPUSD category on ${demoNetwork}`].filter(Boolean).join(', ')} and a running solver.
+          The simulator above runs the same flow end to end.
         </Status>
       )}
 

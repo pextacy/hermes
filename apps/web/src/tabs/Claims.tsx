@@ -19,7 +19,7 @@ import { HERMES, type BchNetwork } from '@hermes/chain';
 import planMd from '../../../../docs/PLAN.md?raw';
 import { useHashParams, useHermes } from '../lib/context';
 import { localWallet } from '../lib/keys';
-import { Card, Copy, NetBadge, Status, TxLink, short } from '../components/ui';
+import { Card, Copy, NetBadge, Status, TxLink, short, More } from '../components/ui';
 import { ClaimCostEstimator, HistoryChart, Leaderboard, ProofDownload, ProofPathView, RootAudit } from '../components/ClaimsInsights';
 
 const files = import.meta.glob('../../../../packages/drops/deployments/*.json', { eager: true, import: 'default' }) as Record<string, unknown>;
@@ -54,7 +54,24 @@ function parseAddress(addr: string): { lockingBytecode: string; tokenAddress: st
 const accountKind = (s: AccountStatus['state']) => (s === 'claimable' ? 'ok' : s === 'already-claimed' ? 'info' : s === 'not-in-tree' ? 'warn' : s === 'receipt-missing' ? 'err' : 'warn');
 
 /** Pool state: active epoch/root per shard, pending roots with their timelock, vault balance. */
+/** "#0–#7" for consecutive shard indices, "#0, #3" otherwise. */
+const shardLabel = (ix: number[]) =>
+  ix.length > 1 && ix.every((v, i) => i === 0 || v === ix[i - 1] + 1) ? `#${ix[0]}–#${ix[ix.length - 1]}` : ix.map((i) => `#${i}`).join(', ');
+/** Group identical rows so eight shards in the same state read as one line. */
+function groupBy<T>(xs: T[], key: (x: T) => string): { first: T; ix: T[] }[] {
+  const m = new Map<string, { first: T; ix: T[] }>();
+  for (const x of xs) {
+    const k = key(x);
+    const g = m.get(k);
+    if (g) g.ix.push(x);
+    else m.set(k, { first: x, ix: [x] });
+  }
+  return [...m.values()];
+}
+
 function PoolView({ pool, treeList }: { pool: PoolStatus; treeList: TreeFileLike[] }) {
+  const shardRows = groupBy(pool.shards, (s) => `${s.epoch}|${s.root}|${s.treeEpoch}|${s.claimedAccounts}`);
+  const pendingRows = groupBy(pool.pending, (p) => `${p.epoch}|${p.root}|${p.matchesTree}|${p.confirmations}|${p.remaining}`);
   return (
     <div className="small stack-sm" data-testid="pool-status">
       <table className="table">
@@ -67,9 +84,9 @@ function PoolView({ pool, treeList }: { pool: PoolStatus; treeList: TreeFileLike
           </tr>
         </thead>
         <tbody>
-          {pool.shards.map((s) => (
+          {shardRows.map(({ first: s, ix }) => (
             <tr key={s.shardIndex}>
-              <td>#{s.shardIndex}</td>
+              <td>{shardLabel(ix.map((x) => x.shardIndex))}</td>
               <td>{s.epoch === 0 ? 'none yet' : s.epoch}</td>
               <td>
                 {s.epoch === 0 ? (
@@ -89,9 +106,9 @@ function PoolView({ pool, treeList }: { pool: PoolStatus; treeList: TreeFileLike
         <p className="muted">No pending root waiting for its timelock.</p>
       ) : (
         <ul>
-          {pool.pending.map((p) => (
+          {pendingRows.map(({ first: p, ix }) => (
             <li key={`${p.shardIndex}-${p.epoch}-${p.root}`}>
-              Pending epoch {p.epoch} (shard #{p.shardIndex}) <code className="mono">{short(p.root, 10, 6)}</code>{' '}
+              Pending epoch {p.epoch} ({ix.length > 1 ? 'shards' : 'shard'} {shardLabel(ix.map((x) => x.shardIndex))}) <code className="mono">{short(p.root, 10, 6)}</code>{' '}
               {p.matchesTree === undefined ? 'no tree file to audit against' : p.matchesTree ? `matches tree-${p.epoch}.json ✔` : `DOES NOT match tree-${p.epoch}.json ✘ (authority should cancel)`}
               {' · '}
               {p.confirmations === undefined
@@ -306,10 +323,8 @@ function Sandbox() {
   return (
     <div className="stack-sm">
       <p className="muted small">
-        Same transactions as chipnet, nothing broadcast: <code>deployDrops</code> → <code>buildPublish</code> → <code>buildPromote</code> →{' '}
-        <code>claimForWallet</code> on CashScript’s mock network with the full BCH 2026 VM. The trees are the published tree-N.json files plus one
-        throwaway sandbox wallet (100,000 units per epoch), so roots differ from the published ones. Blocks are simulated; promotion spends the
-        pending root with nSequence = its age, so an early promotion is refused by the covenant’s own timelock check.
+        The same transactions as the live pool, run on the BCH 2026 VM in this tab with simulated blocks. Nothing is broadcast. The trees add one
+        throwaway sandbox wallet, so their roots differ from the published ones.
       </p>
       <div className="row wrap">
         <button className={state ? '' : 'primary'} onClick={() => void start()} disabled={busy || !trees.length}>
@@ -647,9 +662,8 @@ export function Claims() {
       <div className="hero small">
         <h2>Hermes Drops</h2>
         <p>
-          Pull-based reward claims for CashTokens, built for FoldingCash. The operator publishes one Merkle root per epoch; users claim{' '}
-          <em>whenever they like, any amount</em>. A receipt NFT records what each account has claimed, a bitmap blocks a second “first claim”,
-          and a new root only becomes claimable {TIMELOCK} blocks after it hits the chain, so anyone can audit it first.
+          FoldingCash rewards as one Merkle root per epoch. Members claim whenever they like; a receipt NFT tracks what each account has taken,
+          and every new root waits {TIMELOCK} blocks on-chain before it pays, so anyone can audit it first.
         </p>
       </div>
 
@@ -662,16 +676,6 @@ export function Claims() {
           </p>
         )}
         <Lookup />
-      </Card>
-
-      {latest && (
-        <Card title={`Leaderboard: top earners, epoch ${latest.epoch}`}>
-          <Leaderboard tree={latest} />
-        </Card>
-      )}
-
-      <Card title="Root audit (in this browser)">
-        <RootAudit trees={trees} deployment={chipnet} network={LIVE_NET} />
       </Card>
 
       <Card title={`2 · Claim on ${LIVE_NET}`} aside={<NetBadge network={LIVE_NET} />}>
@@ -693,6 +697,17 @@ export function Claims() {
 
       <Card title={chipnet ? '3 · Sandbox: the same flow in the browser VM' : '3 · Claim in the browser VM (sandbox)'} aside={<NetBadge network="mock" />}>
         <Sandbox />
+      </Card>
+
+      <More>
+      {latest && (
+        <Card title={`Leaderboard: top earners, epoch ${latest.epoch}`}>
+          <Leaderboard tree={latest} />
+        </Card>
+      )}
+
+      <Card title="Root audit (in this browser)">
+        <RootAudit trees={trees} deployment={chipnet} network={LIVE_NET} />
       </Card>
 
       <Card title="Scripted covenant demo" aside={<NetBadge network="mock" />}>
@@ -748,7 +763,7 @@ export function Claims() {
       </Card>
 
       <div ref={guideRef} id="drops-guide">
-        <Card title="Developer guide: extending Hermes Drops">
+        <Card title="Developer guide: extending Hermes Drops" open={location.hash.includes('guide')}>
           <p className="small muted">
             From <code>docs/PLAN.md</code> §5.1 (rendered from the same file). CLI: <code>pnpm --filter @hermes/drops exec tsx src/cli.ts</code>{' '}
             <code>tree | deploy | publish | cancel | promote | status | proof | cost | demo</code>; watcher:{' '}
@@ -757,6 +772,7 @@ export function Claims() {
           {guideText ? <MiniMarkdown text={guideText} /> : <Status kind="warn">PLAN.md §5.1 not found in this build.</Status>}
         </Card>
       </div>
+      </More>
     </div>
   );
 }

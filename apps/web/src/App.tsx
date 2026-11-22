@@ -131,8 +131,7 @@ function Shell() {
         </ErrorBoundary>
       </main>
       <footer>
-        Hermes never holds your funds: bindings live on Nostr, swaps are HTLCs on both chains, rewards are pulled from a covenant. Built for BCH
-        BLAZE 2026.{' '}
+        Hermes never holds your funds. Built for BCH BLAZE 2026.{' '}
         <button className="link small" onClick={() => setHelp(true)}>
           Keyboard shortcuts (?)
         </button>

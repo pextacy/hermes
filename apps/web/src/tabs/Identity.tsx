@@ -42,7 +42,7 @@ import { IdentityTools } from '../components/IdentityTools';
 import { Qr } from '../components/Qr';
 import { payLinkUrl } from '@hermes/pay';
 import { WizardConnectBchSigner } from '../lib/wcsigner';
-import { Card, Copy, NetBadge, Status, short } from '../components/ui';
+import { Card, Copy, NetBadge, Status, short, More } from '../components/ui';
 import { load, loadChoice, save } from '../lib/storage';
 import { changeLabel, nip39State, verifierEndpoint } from '../lib/identity-ui';
 
@@ -374,7 +374,7 @@ export function Identity() {
     <div className="stack">
       <div className="hero small">
         <h2>Hermes ID</h2>
-        <p>Bind a Bitcoin Cash key to your Nostr identity. Both keys sign the same canonical statement; anyone can verify it from relays.</p>
+        <p>Link a Bitcoin Cash key to your Nostr key. Both keys sign the same statement, so anyone can check it from relays.</p>
       </div>
 
       <div className="grid2">
@@ -655,6 +655,7 @@ export function Identity() {
         </Card>
       )}
 
+      <More>
       {bound && current && <IdentityTools identity={current} discovery={discovery} />}
 
       <Card title="Back up your keys · key loss">
@@ -756,10 +757,10 @@ export function Identity() {
       </Card>
 
       <VerifyTool mine={bound?.event} />
+      </More>
 
       <p className="muted small">
-        Discovery uses {discovery.relays.length} relays ({discovery.relays.map((r) => r.replace('wss://', '')).join(', ')}) — change them in Settings. Kind 30078, tag d=hermes-id;
-        searchable by address with tag i=bch:&lt;address&gt;.
+        Discovery uses {discovery.relays.length} relays ({discovery.relays.map((r) => r.replace('wss://', '')).join(', ')}). Change them in Settings.
       </p>
     </div>
   );
