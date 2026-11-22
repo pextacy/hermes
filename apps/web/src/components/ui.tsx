@@ -12,12 +12,10 @@ export function Card({ title, children, aside, fold, open }: { title?: ReactNode
       <details className="card fold" open={open}>
         <summary className="card-head">
           <h3>{title}</h3>
+          {aside && <span className="fold-aside">{aside}</span>}
         </summary>
         <FoldCtx.Provider value={false}>
-          <div className="fold-body">
-            {aside && <div className="fold-aside">{aside}</div>}
-            {children}
-          </div>
+          <div className="fold-body">{children}</div>
         </FoldCtx.Provider>
       </details>
     );
@@ -46,12 +44,14 @@ export function More({ children, label = 'More' }: { children: ReactNode; label?
   );
 }
 
+const NET_LABEL: Record<string, string> = { mainnet: 'Mainnet', chipnet: 'Chipnet', testnet4: 'Testnet4', mock: 'Simulated', evm: 'EVM', id: 'Identity', docs: 'Docs' };
+
 export function NetBadge({ network }: { network: BchNetwork | string }) {
   const n = String(network);
   const title = n === 'mainnet' ? 'Bitcoin Cash mainnet: real funds' : n === 'chipnet' ? 'Bitcoin Cash chipnet: test coins, no value' : n === 'testnet4' ? 'Bitcoin Cash testnet4: test coins, no value' : n;
   return (
     <span className={`net net-${n}`} title={title}>
-      {n.toUpperCase()}
+      {NET_LABEL[n] ?? n}
     </span>
   );
 }

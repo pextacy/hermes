@@ -13,6 +13,21 @@ import { PayloadExplorer } from '../components/dev/PayloadExplorer';
 import { HashlockTool } from '../components/dev/HashlockTool';
 import { NostrKinds } from '../components/dev/NostrKinds';
 import { LeafEncoder } from '../components/dev/LeafEncoder';
+import { OnChain, Section, Stats } from '../components/Sections';
+import report from '../generated/test-report.json';
+import { NETWORKS } from '@hermes/chain';
+import dropsT4 from '../../../../packages/drops/deployments/testnet4.json';
+import { HeroArt } from '../components/HeroArt';
+
+const base = NETWORKS.evm.baseSepolia;
+const t4 = NETWORKS.bch.testnet4;
+const t4addr = (a: string) => `${t4.explorerTx.replace('/tx/', '/address/')}${a}`;
+const deployed = [
+  ...(base.htlc ? [{ label: 'HermesHTLC', network: 'Base Sepolia', value: base.htlc, href: `${base.explorerTx.replace('/tx/', '/address/')}${base.htlc}` }] : []),
+  { label: 'Drops shard covenant', network: 'BCH testnet4', value: dropsT4.addresses.shard, href: t4addr(dropsT4.addresses.shard) },
+  { label: 'Drops vault covenant', network: 'BCH testnet4', value: dropsT4.addresses.vault, href: t4addr(dropsT4.addresses.vault) },
+  ...(t4.tokens.PUSD.category ? [{ label: 'tPUSD token', network: 'BCH testnet4', value: t4.tokens.PUSD.category, href: `${t4.explorerTx}${t4.tokens.PUSD.category}` }] : []),
+];
 
 /** Developer tools (Round 3, G29–G35); each section has id `dev-<key>`. */
 const TOOLS = [
@@ -49,9 +64,23 @@ export function Developers() {
   return (
     <div className="stack">
       <div className="hero small">
+        <HeroArt kind="developers" />
         <h2>Developers</h2>
         <p>The pieces Hermes is built from, ready to reuse: XO templates, the HTLC in four languages, SolidCash contracts and the verification library.</p>
       </div>
+
+      <Stats
+        items={[
+          { value: report.totals.passed, label: 'Tests passing' },
+          { value: report.totals.suites, label: 'Test suites' },
+          { value: 4, label: 'HTLC implementations' },
+          { value: 3, label: 'XO templates' },
+        ]}
+      />
+
+      <Section title="Deployed on testnets">
+        <OnChain items={deployed} />
+      </Section>
 
       <More label="Tools">
         {TOOLS.map((t) => (

@@ -21,6 +21,8 @@ import { useHashParams, useHermes } from '../lib/context';
 import { localWallet } from '../lib/keys';
 import { Card, Copy, NetBadge, Status, TxLink, short, More } from '../components/ui';
 import { ClaimCostEstimator, HistoryChart, Leaderboard, ProofDownload, ProofPathView, RootAudit } from '../components/ClaimsInsights';
+import { FeatureGrid, Section, Stats } from '../components/Sections';
+import { HeroArt } from '../components/HeroArt';
 
 const files = import.meta.glob('../../../../packages/drops/deployments/*.json', { eager: true, import: 'default' }) as Record<string, unknown>;
 type TreeFile = TreeFileLike & { window: [string, string]; leaves: number; depth: number; realMembers: number };
@@ -660,6 +662,7 @@ export function Claims() {
   return (
     <div className="stack">
       <div className="hero small">
+        <HeroArt kind="claims" />
         <h2>Hermes Drops</h2>
         <p>
           FoldingCash rewards as one Merkle root per epoch. Members claim whenever they like; a receipt NFT tracks what each account has taken,
@@ -667,18 +670,28 @@ export function Claims() {
         </p>
       </div>
 
-      <Card title="1 · Find your rewards">
+      {latest && (
+        <Stats
+          items={[
+            { value: trees.length, label: 'Epochs published' },
+            { value: latest.realMembers, label: 'FoldingCash members' },
+            { value: latest.leaves, label: 'Leaves per tree' },
+            { value: `${TIMELOCK} blocks`, label: 'Audit window' },
+          ]}
+        />
+      )}
+
+      <Card title="Find your rewards">
         {latest && (
           <p className="small muted">
-            {trees.length} epoch tree(s) built from the public FoldingCash distribution API: latest epoch {latest.epoch} ({month(latest.window[0])}),{' '}
-            {latest.realMembers} real members padded with a documented sample to {latest.leaves} leaves, depth {latest.depth}, root{' '}
-            <code className="mono">{short(latest.root, 12, 6)}</code>. The watcher recomputes every root independently.
+            Search the published trees. Latest: epoch {latest.epoch} ({month(latest.window[0])}), root{' '}
+            <code className="mono">{short(latest.root, 12, 6)}</code>.
           </p>
         )}
         <Lookup />
       </Card>
 
-      <Card title={`2 · Claim on ${LIVE_NET}`} aside={<NetBadge network={LIVE_NET} />}>
+      <Card title={`Claim on ${LIVE_NET}`} aside={<NetBadge network={LIVE_NET} />}>
         {chipnet ? (
           <ChipnetClaim deployment={chipnet} />
         ) : (
@@ -695,18 +708,29 @@ export function Claims() {
         )}
       </Card>
 
-      <Card title={chipnet ? '3 · Sandbox: the same flow in the browser VM' : '3 · Claim in the browser VM (sandbox)'} aside={<NetBadge network="mock" />}>
+      <Card title={chipnet ? 'Sandbox: the same flow in your browser' : 'Claim in your browser (sandbox)'} aside={<NetBadge network="mock" />}>
         <Sandbox />
       </Card>
 
+      <Section title="Why pull, not push">
+        <FeatureGrid
+          items={[
+            { title: 'One root per epoch', text: 'The operator posts 32 bytes, not one payment per member.' },
+            { title: 'Claim any time', text: 'A receipt NFT records what you have taken; the next claim pays only the difference.' },
+            { title: 'Audit window', text: `Each new root waits ${TIMELOCK} blocks before it pays, and the authority can veto a bad one.` },
+            { title: 'Recomputable', text: 'Anyone can rebuild every root from the public FoldingCash data.' },
+          ]}
+        />
+      </Section>
+
       <More>
       {latest && (
-        <Card title={`Leaderboard: top earners, epoch ${latest.epoch}`}>
+        <Card title={`Top earners · epoch ${latest.epoch}`}>
           <Leaderboard tree={latest} />
         </Card>
       )}
 
-      <Card title="Root audit (in this browser)">
+      <Card title="Root audit">
         <RootAudit trees={trees} deployment={chipnet} network={LIVE_NET} />
       </Card>
 
@@ -721,7 +745,7 @@ export function Claims() {
         {log.length > 0 && <pre className="mono pre">{log.join('\n')}</pre>}
       </Card>
 
-      <Card title="Push vs pull: operator cost over 12 epochs">
+      <Card title="Push vs pull: operator cost">
         <p className="muted small">
           Model in packages/drops/src/cost.ts with sizes measured from the demo transactions (claim ≈ 1,782 bytes at depth 9, promotion ≈ 1,271
           bytes), 1 sat/byte, 1,000-sat token dust, 25% of users claiming per epoch. 62 is FoldingCash’s actual member count for October 2026.
@@ -763,7 +787,7 @@ export function Claims() {
       </Card>
 
       <div ref={guideRef} id="drops-guide">
-        <Card title="Developer guide: extending Hermes Drops" open={location.hash.includes('guide')}>
+        <Card title="Developer guide" open={location.hash.includes('guide')}>
           <p className="small muted">
             From <code>docs/PLAN.md</code> §5.1 (rendered from the same file). CLI: <code>pnpm --filter @hermes/drops exec tsx src/cli.ts</code>{' '}
             <code>tree | deploy | publish | cancel | promote | status | proof | cost | demo</code>; watcher:{' '}

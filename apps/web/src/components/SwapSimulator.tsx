@@ -122,7 +122,7 @@ export function SwapSimulator() {
   const nowSim = current?.at ?? plan?.t0;
   const solverBadTimeout = plan && plan.scenario === 'short-timeout' ? steps.find((s) => s.checks)?.at : undefined;
   return (
-    <Card title="Try it now: a full atomic swap in your browser" aside={<span className="net net-mock">NO WALLET · NO TESTNET</span>}>
+    <Card title="Try it now: a full atomic swap in your browser">
       <p className="muted small">
         Runs the real contracts on both chains, here in this tab: HermesHTLC on an in-browser EVM and the CashScript HTLC on the BCH 2026 VM.
         Nothing is broadcast.

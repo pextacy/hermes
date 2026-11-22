@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
-import { Banner, MainnetStrip } from './components/Banner';
+import { Banner } from './components/Banner';
 import { WalletButton } from './components/Wallet';
 import { NetBadge } from './components/ui';
 import { HashParamsProvider, HermesProvider, useHashParams, useHermes } from './lib/context';
@@ -10,7 +10,7 @@ import { Pay } from './tabs/Pay';
 import { Identity } from './tabs/Identity';
 import { SettingsTab } from './tabs/Settings';
 import { ErrorBoundary, HealthIndicator } from './components/Health';
-import { JudgeTour } from './components/JudgeTour';
+
 
 // Heavy, less-visited tabs load on demand (viem + EVM HTLC, drops covenant, contract sources).
 const Swap = lazy(() => import('./tabs/Swap').then((m) => ({ default: m.Swap })));
@@ -102,28 +102,27 @@ function Shell() {
     <>
       <SkipLink />
       <Banner />
-      {payNetwork === 'mainnet' && <MainnetStrip onChipnet={() => setPayNetwork('chipnet') && toast('Pay switched to chipnet — test coins only', 'ok')} />}
       <header className="top">
-        <a className="brand" href="#pay">
-          <img src="hermes.svg" alt="" width={28} height={28} />
-          <span>Hermes</span>
-        </a>
-        <nav aria-label="Sections">
-          {TABS.map((t) => (
-            <a key={t.id} href={`#${t.id}`} className={t.id === tab ? 'on' : ''} aria-current={t.id === tab ? 'page' : undefined}>
-              {t.label}
-            </a>
-          ))}
-        </nav>
-        <div className="right">
-          <NetBadge network={network} />
-          <HealthIndicator network={network} />
-          <ThemeToggle theme={theme} onChange={setTheme} />
-          <WalletButton />
+        <div className="top-in">
+          <a className="brand" href="#pay">
+            <img src="hermes.svg" alt="" width={22} height={22} />
+            <span>Hermes</span>
+          </a>
+          <nav aria-label="Sections">
+            {TABS.map((t) => (
+              <a key={t.id} href={`#${t.id}`} className={t.id === tab ? 'on' : ''} aria-current={t.id === tab ? 'page' : undefined}>
+                {t.label}
+              </a>
+            ))}
+          </nav>
+          <div className="right">
+            <HealthIndicator network={network} />
+            <ThemeToggle theme={theme} onChange={setTheme} />
+            <WalletButton />
+          </div>
         </div>
       </header>
       <main id="main-content" tabIndex={-1}>
-        {tab !== 'settings' && <JudgeTour tab={tab} />}
         <ErrorBoundary resetKey={tab}>
           <Suspense fallback={<p className="muted">Loading…</p>}>
             <Current />
@@ -131,9 +130,9 @@ function Shell() {
         </ErrorBoundary>
       </main>
       <footer>
-        Hermes never holds your funds. Built for BCH BLAZE 2026.{' '}
+        <span>Hermes never holds your funds.</span>
         <button className="link small" onClick={() => setHelp(true)}>
-          Keyboard shortcuts (?)
+          Keyboard shortcuts
         </button>
       </footer>
       <ShortcutHelp open={help} onClose={() => setHelp(false)} />

@@ -37,6 +37,8 @@ import { Card, NetBadge, Status, TxLink, short, Copy, More } from '../components
 import { Qr } from '../components/Qr';
 import { load, save } from '../lib/storage';
 import { AddressGuardBox, BatchPay, ContactBadge, ContactsCard, QrScan, ReceiptButton, RequestWatcher, TxPreviewView, estimatePreview, isRawAddress, receiptLine } from '../components/PayExtras';
+import { FeatureGrid, Section } from '../components/Sections';
+import { HeroArt } from '../components/HeroArt';
 
 type S = Utxo & { lockingBytecode: string };
 /** BCH, a configured token (PUSD / FLDCH), or any fungible CashToken by category id. */
@@ -421,10 +423,10 @@ export function Pay() {
   return (
     <div className="stack" ref={topRef}>
       <div className="hero">
+        <HeroArt kind="pay" />
         <h1>Pay a person, not an address.</h1>
         <p>
-          Paste an npub or a name. Hermes finds the Bitcoin Cash address they signed for and checks both signatures before you pay.{' '}
-          <NetBadge network={payNetwork} />
+          Paste an npub or a name. Hermes finds the Bitcoin Cash address they signed for and checks both signatures before you pay.
         </p>
       </div>
 
@@ -497,7 +499,7 @@ export function Pay() {
               </span>
             </span>
           }
-          aside={<span className={`pill ${c.payable ? 'pill-ok' : 'pill-warn'}`}>{c.payable ? 'Verified' : 'Check warnings'}</span>}
+          aside={<span className={c.payable ? 'stamp' : 'stamp warn'}>{c.payable ? 'Verified' : 'Check warnings'}</span>}
         >
           <ContactBadge r={recipient!} typed={resolvedInput} />
           <ul className="checks">
@@ -605,7 +607,7 @@ export function Pay() {
           {!sending && !txid && blockers.length > 0 && <p className="muted small">To send: {blockers.join(' · ')}.</p>}
           {txid && (
             <Status kind="ok">
-              Sent ✔ <TxLink network={payNetwork} txid={txid} /> — saved to “Your payments” below. {receipt && <ReceiptButton receipt={receipt} />}
+              Sent ✔ <TxLink network={payNetwork} txid={txid} /> — saved to “Payment history” below. {receipt && <ReceiptButton receipt={receipt} />}
             </Status>
           )}
           {noteStatus && <Status kind={noteStatus.kind}>{noteStatus.text}</Status>}
@@ -617,20 +619,48 @@ export function Pay() {
       )}
 
       {!c && (
-        <div className="explainer">
-          <div>
-            <b>1 · Link</b>
-            <p>Your BCH key and Nostr key sign one statement, published to relays.</p>
-          </div>
-          <div>
-            <b>2 · Find</b>
-            <p>Anyone fetches it from several relays and checks both signatures.</p>
-          </div>
-          <div>
-            <b>3 · Pay</b>
-            <p>Funds go to the verified address. Nothing to copy, nothing to poison.</p>
-          </div>
-        </div>
+        <ol className="flow" aria-label="How it works">
+          <li>
+            <span className="flow-dot">1</span>
+            <b>Link</b>
+            <p>Your BCH key and Nostr key sign one statement.</p>
+          </li>
+          <li>
+            <span className="flow-dot">2</span>
+            <b>Find</b>
+            <p>Anyone fetches it from relays and checks both signatures.</p>
+          </li>
+          <li>
+            <span className="flow-dot">3</span>
+            <b>Pay</b>
+            <p>Funds go to the verified address. Nothing to copy.</p>
+          </li>
+        </ol>
+      )}
+
+      {!c && (
+        <>
+          <Section title="Checked before every payment" sub="Hermes will not pay an address it cannot verify.">
+            <FeatureGrid
+              items={[
+                { title: 'Both signatures', text: 'The BCH key and the Nostr key signed the same statement.' },
+                { title: 'Key rotations', text: 'Every change of address is signed by the key it replaces.' },
+                { title: 'Lookalike addresses', text: 'A pasted address that only resembles a known one is flagged before you send.' },
+                { title: 'Name checks', text: 'A NIP-05 name is matched against the npub it claims.' },
+              ]}
+            />
+          </Section>
+          <Section title="Works with what you have">
+            <FeatureGrid
+              items={[
+                { title: 'Your wallet', text: 'Sign with any WizardConnect wallet, or with a key kept in this browser.' },
+                { title: 'Nostr extensions', text: 'Use a NIP-07 extension; your Nostr key never leaves it.' },
+                { title: 'Pay links and QR', text: 'Share a link that opens your verified card with the amount filled in.' },
+                { title: 'BCH and CashTokens', text: 'Send BCH, PUSD or any fungible CashToken by category.' },
+              ]}
+            />
+          </Section>
+        </>
       )}
 
       <More>
@@ -646,7 +676,7 @@ export function Pay() {
       <NotesInbox />
 
       <Card
-        title="Your payments (this browser)"
+        title="Payment history"
         open={history.length > 0}
         aside={
           history.length > 0 && (
@@ -741,7 +771,7 @@ function RequestCard({ myNpub, pusd }: { myNpub: string | null; pusd?: TokenMeta
   const okWho = kind === 'nostr' || kind === 'nip05';
   const okAmount = !amount || /^\d+(\.\d+)?$/.test(amount.trim());
   return (
-    <Card title="Get paid: your pay link">
+    <Card title="Request a payment">
       {!myNpub && (
         <p className="muted small">
           Link your BCH and Nostr keys in <a href="#identity">Identity</a> first — then your npub is filled in here. Or paste any linked npub / name.
@@ -815,7 +845,7 @@ function NotesInbox() {
 
   return (
     <Card
-      title="Payment notes for you"
+      title="Payment notes"
       aside={
         <button className="link" onClick={() => void check()} disabled={busy}>
           {busy ? 'checking…' : notes ? 'refresh' : 'check'}

@@ -67,7 +67,7 @@ export function SettingsTab() {
               </button>
             ))}
           </div>
-          <p className="muted small">Switching to mainnet asks for confirmation; a warning strip stays on screen while Pay is on mainnet.</p>
+          <p className="muted small">Switching to mainnet asks for confirmation first.</p>
         </Card>
       </div>
       <Card title="Nostr relays" aside={<span className="muted small">one per line · wss://</span>}>
@@ -82,7 +82,7 @@ export function SettingsTab() {
         />
         {errors.relays && <Status kind="err">{errors.relays}</Status>}
       </Card>
-      <div className="grid2">
+      <div className="grid3">
         <Card title="Electrum · mainnet" aside={<span className="muted small">host or host:port</span>}>
           <textarea className="mono" rows={4} value={main} spellCheck={false} aria-invalid={!!errors.mainnet} aria-label="Mainnet Electrum servers" onChange={(e) => setMain(e.target.value)} />
           {errors.mainnet && <Status kind="err">{errors.mainnet}</Status>}
@@ -131,7 +131,7 @@ export function SettingsTab() {
       {msg && <Status kind={msg.ok ? 'ok' : 'err'}>{msg.text}</Status>}
       {test && (
         <Card title="Connection test" aside={<span className="muted small">servers as typed above</span>}>
-          <div className="grid2">
+          <div className="grid3">
             <TestPanel key={`m${test.n}`} draft={test.draft} network="mainnet" />
             <TestPanel key={`c${test.n}`} draft={{ ...test.draft, relays: [] }} network="chipnet" />
             <TestPanel key={`t${test.n}`} draft={{ ...test.draft, relays: [] }} network="testnet4" />

@@ -45,6 +45,8 @@ import { WizardConnectBchSigner } from '../lib/wcsigner';
 import { Card, Copy, NetBadge, Status, short, More } from '../components/ui';
 import { load, loadChoice, save } from '../lib/storage';
 import { changeLabel, nip39State, verifierEndpoint } from '../lib/identity-ui';
+import { FeatureGrid, Section } from '../components/Sections';
+import { HeroArt } from '../components/HeroArt';
 
 type BchMode = 'wizard' | 'local';
 type Notice = { kind: 'ok' | 'warn' | 'err' | 'info'; text: string };
@@ -373,12 +375,13 @@ export function Identity() {
   return (
     <div className="stack">
       <div className="hero small">
+        <HeroArt kind="identity" />
         <h2>Hermes ID</h2>
         <p>Link a Bitcoin Cash key to your Nostr key. Both keys sign the same statement, so anyone can check it from relays.</p>
       </div>
 
       <div className="grid2">
-        <Card title="1 · Nostr key">
+        <Card title="Nostr key">
           <div className="seg">
             <button className={nostrMode === 'nip07' ? 'on' : ''} onClick={() => setNostrMode('nip07')} disabled={!Nip07Signer.available()} title={Nip07Signer.available() ? '' : 'No NIP-07 extension (Alby, nos2x…) detected'}>
               Extension (NIP-07)
@@ -430,7 +433,7 @@ export function Identity() {
           )}
         </Card>
 
-        <Card title="2 · Bitcoin Cash key" aside={<NetBadge network={idNetwork} />}>
+        <Card title="Bitcoin Cash key" aside={<NetBadge network={idNetwork} />}>
           <div className="seg">
             <button className={idNetwork === 'mainnet' ? 'on' : ''} onClick={() => setIdNetwork('mainnet')}>
               Mainnet
@@ -469,13 +472,13 @@ export function Identity() {
             <p className="muted small">
               Address <code className="mono">{short(local.address, 18, 6)}</code> <Copy text={local.address} /> · balance{' '}
               {balance === undefined ? '…' : balance < 0n ? 'unavailable (Electrum unreachable)' : `${formatBch(balance)} BCH`}. Payments to you land on this browser key —
-              use it as a receiving address and sweep it to your wallet. {!backedUp && <b>Not backed up yet (see “Back up” below).</b>}
+              use it as a receiving address and sweep it to your wallet. {!backedUp && <b>Not backed up yet (see “Back up your keys” below).</b>}
             </p>
           )}
         </Card>
       </div>
 
-      <Card title="3 · Link and publish">
+      <Card title="Link and publish">
         {!bound && looked && !busy && <p className="muted small">No Hermes ID binding found for this npub yet. One click signs with both keys and publishes to {discovery.relays.length} relays.</p>}
         <button className="primary" onClick={() => void link()} disabled={!!busy || !npub}>
           {bound ? 'Re-issue binding' : 'Link my BCH key to my Nostr identity'}
@@ -655,10 +658,21 @@ export function Identity() {
         </Card>
       )}
 
+      <Section title="What anyone can verify">
+        <FeatureGrid
+          items={[
+            { title: 'One statement, two signatures', text: 'Your BCH key and Nostr key sign the same text: address, public key and version.' },
+            { title: 'Published to relays', text: 'Stored as a Nostr event on several public relays. There is no Hermes server.' },
+            { title: 'Rotate either key', text: 'Lost or stolen key? The other key signs the replacement, and payers follow it.' },
+            { title: 'Optional identity NFT', text: 'Pin a version on-chain with a CashTokens NFT that wallets can check.' },
+          ]}
+        />
+      </Section>
+
       <More>
       {bound && current && <IdentityTools identity={current} discovery={discovery} />}
 
-      <Card title="Back up your keys · key loss">
+      <Card title="Back up your keys">
         {bchMode === 'local' ? (
           <>
             <p className="muted small">

@@ -30,16 +30,12 @@ export function Banner({ config = HERMES.web.banner as BannerConfig }: { config?
         <a href={pres} target="_blank" rel="noreferrer">
           Widget Factory presentation{b.presentationIsDraft && <span className="draft">draft</span>}
         </a>
-      ) : (
-        <span className="pending">Widget Factory presentation: coming soon</span>
-      )}
+      ) : null}
       {repo ? (
         <a href={repo} target="_blank" rel="noreferrer">
           Source code
         </a>
-      ) : (
-        <span className="pending">Source code: link added at submission</span>
-      )}
+      ) : null}
       {b.ember2026Address ? (
         <span className="ember">
           <span>EMBER2026 (CashTokens):</span> <code>{b.ember2026Address}</code>
@@ -55,9 +51,7 @@ export function Banner({ config = HERMES.web.banner as BannerConfig }: { config?
             {copied ? 'copied' : 'copy'}
           </button>
         </span>
-      ) : (
-        <span className="pending">EMBER2026 address: set by the team at submission</span>
-      )}
+      ) : null}
       {b.preExisting && safeUrl(b.preExisting.repo) && (
         <span>
           Previous work: <a href={safeUrl(b.preExisting.repo)!}>repo</a>

@@ -41,7 +41,7 @@ import {
   type Rfq,
   type SwapState,
 } from '@hermes/swap';
-import { formatUnits, getTokenMeta, parseUnits, stablecoins, tokenConfig } from '@hermes/chain';
+import { HERMES, NETWORKS, formatUnits, getTokenMeta, parseUnits, stablecoins, tokenConfig } from '@hermes/chain';
 import * as nip19 from 'nostr-tools/nip19';
 import { useHermes } from '../lib/context';
 import { ensureLocalNostr, localWallet } from '../lib/keys';
@@ -50,6 +50,8 @@ import { loadArray, reviveBigints, save } from '../lib/storage';
 import { Card, NetBadge, Status, TxLink, short } from '../components/ui';
 import { SwapSimulator } from '../components/SwapSimulator';
 import { FeeBreakdown, TimeoutLadder, downloadText } from '../components/SwapViz';
+import { OnChain, Section, Steps as StepList } from '../components/Sections';
+import { HeroArt } from '../components/HeroArt';
 
 type S = Utxo & { lockingBytecode: string };
 const EVM_KEY = 'baseSepolia' as const;
@@ -381,14 +383,11 @@ export function Swap() {
   return (
     <div className="stack">
       <div className="hero small">
+        <HeroArt kind="swap" />
         <h2>Hermes Swap</h2>
         <p>
           USDC on {evm.name} for PUSD on Bitcoin Cash. One secret unlocks a time-locked contract on each chain: both sides settle, or both
           refund. No bridge, no custodian.
-        </p>
-        <p className="row wrap small">
-          <NetBadge network={demoNetwork} /> <span className="net net-evm">{evm.name.toUpperCase()}</span>
-          <span className="muted">Testnets only. Demo amounts.</span>
         </p>
       </div>
 
@@ -465,6 +464,29 @@ export function Swap() {
           );
         })}
       </Card>
+
+      <Section title="How a swap settles" sub="Either both legs complete, or both sides get their money back.">
+        <StepList
+          items={[
+            { title: 'You lock USDC', tag: `${evm.name} · refundable after ${HERMES.swap.tFirstSeconds / 3600} h`, text: 'HermesHTLC holds it under the hash of a secret only you know.' },
+            { title: 'The solver locks PUSD', tag: `Bitcoin Cash · expires after ${HERMES.swap.tSecondSeconds / 3600} h`, text: 'Same hash, shorter timeout, so the solver always has time to react.' },
+            { title: 'You claim PUSD', text: 'Claiming reveals the secret on Bitcoin Cash.' },
+            { title: 'The solver claims USDC', text: 'It uses the secret you revealed. If either side stops, both refund after their timeout.' },
+          ]}
+        />
+      </Section>
+
+      <Section title="On-chain">
+        <OnChain
+          items={[
+            ...(evm.htlc ? [{ label: 'HermesHTLC', network: evm.name, value: evm.htlc, href: `${evm.explorerTx.replace('/tx/', '/address/')}${evm.htlc}` }] : []),
+            ...(evm.usdc ? [{ label: 'USDC', network: evm.name, value: evm.usdc, href: `${evm.explorerTx.replace('/tx/', '/address/')}${evm.usdc}` }] : []),
+            ...(NETWORKS.bch.testnet4.tokens.PUSD.category
+              ? [{ label: 'tPUSD token', network: 'BCH testnet4', value: NETWORKS.bch.testnet4.tokens.PUSD.category, href: `${NETWORKS.bch.testnet4.explorerTx}${NETWORKS.bch.testnet4.tokens.PUSD.category}` }]
+              : []),
+          ]}
+        />
+      </Section>
 
       {swaps.length > 0 && (
         <div className="row wrap">

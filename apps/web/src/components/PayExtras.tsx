@@ -335,7 +335,7 @@ export function AddressGuardBox({ address, onPayOwner }: { address: string; onPa
 export function ContactsCard({ onPay }: { onPay: (npub: string) => void }) {
   const [contacts, setContacts] = useContacts();
   return (
-    <Card title="Contacts (this browser)" aside={<span className="muted small">{contacts.length} saved</span>}>
+    <Card title="Contacts" aside={<span className="muted small">{contacts.length} saved</span>}>
       {contacts.length === 0 ? (
         <p className="muted small">Save a verified identity from its card (“Save contact”). Every time you pay a contact Hermes re-verifies the binding from relays and flags it if the version changed.</p>
       ) : (
@@ -593,7 +593,7 @@ export function BatchPay() {
   }
 
   return (
-    <Card title="Batch pay: many people, one transaction" aside={<span className="muted small">BCH · up to {MAX_BATCH}</span>}>
+    <Card title="Pay many people at once" aside={<span className="muted small">BCH · up to {MAX_BATCH}</span>}>
       <p className="muted small">
         One line per person: <code>npub-or-name, amount</code>. Each is resolved and verified from relays, then paid in a single transaction with one output per person.
       </p>
